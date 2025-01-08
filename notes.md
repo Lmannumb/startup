@@ -1,6 +1,6 @@
 # CS 260 Notes
 
-[My startup](https://simon.cs260.click)
+[My startup](idk yet)
 
 ## Helpful links
 
