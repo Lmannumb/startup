@@ -1,4 +1,4 @@
-# Your startup name here
+# Balls (I don't know what project I want to do yet)
 
 [My Notes](notes.md)
 
