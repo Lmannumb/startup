@@ -16,15 +16,15 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 > [!NOTE]
 >  Fill in this sections as the submission artifact for this deliverable. You can refer to this [example](https://github.com/webprogramming260/startup-example/blob/main/README.md) for inspiration.
 
-- [ ] Proper use of Markdown in README.md
-- [ ] A concise and compelling elevator pitch in your README.md
-- [ ] Description of key features in your README.md
-- [ ] Description of how you will use each technology
-- [ ] One or more rough sketches of your application. Images must be embedded in your README.md.
+- [x] Proper use of Markdown in README.md
+- [x] A concise and compelling elevator pitch in your README.md
+- [x] Description of key features in your README.md
+- [x] Description of how you will use each technology
+- [x] One or more rough sketches of your application. Images must be embedded in your README.md.
 
 ### Elevator pitch
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+I am going to make an idle game where the user grows plants over time. They can then sell and by plants from others through an online auction. I'm hoping to make this auction similar to Facebook Marketplace, with chatting about the plant
 
 ### Design
 
@@ -34,9 +34,11 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 
 ```mermaid
 sequenceDiagram
-    actor You
+    actor User
     actor Website
-    You->>Website: Replace this with your design
+    actor OtherUser
+    You->>Website: Plants and Auctions!
+    OtherUser->>Website: More Plants and Auctions!
 ```
 
 ### Key features
