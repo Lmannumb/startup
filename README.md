@@ -37,7 +37,7 @@ sequenceDiagram
     actor User
     actor Website
     actor OtherUser
-    You->>Website: Plants and Auctions!
+    User->>Website: Plants and Auctions!
     OtherUser->>Website: More Plants and Auctions!
 ```
 
