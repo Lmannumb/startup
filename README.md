@@ -28,35 +28,36 @@ I am going to make an idle game where the user grows plants over time. They can 
 
 ### Design
 
-![Design image](https://picsum.photos/200/300)
+![Design image](./designpicture.png)
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+There will be a home page for general updates on the app, a trading page for communication and transactions with other users, a profile page for user settings, like visibility status, blocking, and following other users, etc. Next are the core of the app: with a shop page, for buying seeds and other items that can be then used in the garden to grow a user's plants. As a user grows plants, they will be able to sell or trade them for money, allowing them to buy even better seeds and plants for their future garden. This combination of features will allow users to enjoy an experience of an interactive combination of efforts with other users as they all grow their individual gardens.
 
 ```mermaid
 sequenceDiagram
     actor User
     actor Website
     actor OtherUser
-    User->>Website: Plants and Auctions!
-    OtherUser->>Website: More Plants and Auctions!
+    User->>Website: Plants and Trades!
+    OtherUser->>Website: More Plants and Trades!
 ```
 
 ### Key features
 
-- Describe your key feature
-- Describe your key feature
-- Describe your key feature
+- A Garden for users to grow plants over time
+- A shop for users to buy and sell plants to upgrade their Garden
+- A marketplace with other users for cooperation and other interaction.
 
 ### Technologies
 
 I am going to use the required technologies in the following ways.
 
-- **HTML** - Description here
-- **CSS** - Description here
-- **React** - Description here
-- **Service** - Description here
-- **DB/Login** - Description here
-- **WebSocket** - Description here
+- **HTML** - The website will have text and images and other website functionality
+- **CSS** - The site will have style
+- **JavaScript** - Website functionality
+- **React** - Interactive pages
+- **Service** - Backend services will control time calculation and application data.
+- **DB/Login** - There will be an account/user system to keep track of user's game-related data
+- **WebSocket** - There will be real-time communication with other users
 
 ## 🚀 AWS deliverable
 
