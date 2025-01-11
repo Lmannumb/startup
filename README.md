@@ -19,7 +19,7 @@ I am going to make an idle game where the user grows plants over time. They can 
 
 ### Design
 
-![Design image](/designpicture.png)
+![Design image](/designimage.png)
 
 There will be a home page for general updates on the app, a trading page for communication and transactions with other users, a profile page for user settings, like visibility status, blocking, and following other users, etc. Next are the core of the app: with a shop page, for buying seeds and other items that can be then used in the garden to grow a user's plants. As a user grows plants, they will be able to sell or trade them for money, allowing them to buy even better seeds and plants for their future garden. This combination of features will allow users to enjoy an experience of an interactive combination of efforts with other users as they all grow their individual gardens.
 
