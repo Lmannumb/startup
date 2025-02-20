@@ -61,15 +61,16 @@ I completed the EC2 instance setup, and got my site https certified.
 
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
-- [ ] **HTML pages** - I did not complete this part of the deliverable.
-- [ ] **Proper HTML element usage** - I did not complete this part of the deliverable.
-- [ ] **Links** - I did not complete this part of the deliverable.
-- [ ] **Text** - I did not complete this part of the deliverable.
-- [ ] **3rd party API placeholder** - I did not complete this part of the deliverable.
-- [ ] **Images** - I did not complete this part of the deliverable.
-- [ ] **Login placeholder** - I did not complete this part of the deliverable.
-- [ ] **DB data placeholder** - I did not complete this part of the deliverable.
-- [ ] **WebSocket placeholder** - I did not complete this part of the deliverable.
+- [x] **HTML pages** - I created HTML pages for all of my intended features.
+- [x] **Proper HTML element usage** - I followed proper guidelines for HTML element formatting.
+- [x] **Links** - I used links to connect the pages of my site.
+- [x] **Text** - My project has sufficient text for task.
+- [x] **3rd party API placeholder** - I have left notes denoting where I will use 3rd party API calls.
+- [x] **Images** - I have added images to some of the functionality of my site.
+- [x] **Login placeholder** - My site has a placeholder for a login system.
+- [x] **DB data placeholder** - I have denoted where my site will use a database to handle its features.
+- [x] **WebSocket placeholder** - I have denoted where my site will use WebSocket features to handle its features.
+
 
 ## 🚀 CSS deliverable
 
