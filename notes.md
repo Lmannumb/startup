@@ -15,3 +15,7 @@ It went alright.
 ## HTML Notes
 
 I be poppin bottles.
+
+##CSS Notes
+
+There is a lot of stuff. A lot of details.
