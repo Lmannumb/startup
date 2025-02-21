@@ -25,11 +25,19 @@ body {
     display: flex;
     /*  overwrite Bootstrap so the menu does not wrap */
     flex-direction: row !important;
+    align-items: center;
+    justify-content: space-evenly;
     list-style: none;
   }
+
+.navbar-nav {
+    margin-top: 8px;
+}
   
 .navbar-brand {
-    padding-left: 0.3em;
+    padding-left: 0.1vw;
+    padding-top: 0;
+    font-size: 2rem;
     /* border-bottom: solid rgb(182, 182, 182) thin; */
   }
   
