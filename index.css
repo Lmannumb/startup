@@ -11,13 +11,16 @@ body {
   
   main {
     flex: 1 calc(100vh - 110px);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-around;
+    display: block;
+    /*flex-direction: column;*/
+    justify-content: start;/**/
   }
   
-  
+  .text-center {
+    align-items: start !important;
+    text-align: start !important;
+
+  }
 
   .bg-dark {
     background-color: rgb(0, 80, 0) !important;
