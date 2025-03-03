@@ -34,10 +34,21 @@
     </header>
 
     <main class="container-fluid bg-secondary text-center">
-    <div>When the user logs in, this main element will change to a notifications panel with a sign out button.</div>
-    <div>When I get to JavaScript, this page will automatically route to the signed-in version if the user is signed in.</div>
+    <!--<div>When the user logs in, this main element will change to a notifications panel with a sign out button.</div>
+    <div>When I get to JavaScript, this page will automatically route to the signed-in version if the user is signed in.</div>-->
         <h2>Login or Register to Idle Garden</h2>
+        
         <form method="get" action="accountsignedin.html">
+          <div class="input-group mb-3">
+            <input class="form-control" type="text" placeholder="username" />
+          </div>
+          <div class="input-group mb-3">
+            <input class="form-control" type="password" placeholder="password" />
+          </div>
+          <button type="submit" class="btn btn-primary">Login</button>
+          <button type="submit" class="btn btn-secondary">Register</button>
+        </form>
+        <!--<form method="get" action="accountsignedin.html">
           <div>
             <input type="text" placeholder="your@email.com" />
           </div>
@@ -46,7 +57,7 @@
           </div>
           <button type="submit">Login</button>
           <button type="submit">Register</button>
-        </form>
+        </form>-->
       </main>
 
       <footer class="bg-dark text-white-50">

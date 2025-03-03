@@ -17,6 +17,10 @@ body {
     overflow-y: auto;
   }
   
+a {
+  color:aquamarine;
+}
+
   .text-center {
     align-items: start !important;
     text-align: start !important;
@@ -59,6 +63,28 @@ body {
   
   footer a {
     float: right;
+  }
+
+  .btn {
+    background-color:green;
+    border-color: green;
+  }
+
+  .time {
+    /*color: aquamarine;*/
+    color: hsl(120, 30%, 70%);
+    font-size: calc(var(--bs-body-font-size) / 3 * 2);
+  }
+
+  .you {
+    text-align: right !important;
+    margin-left: 20vw;
+  }
+
+  .homepagestuff {
+    display:flex;
+    flex-direction: row;
+    justify-content: space-between;
   }
   
 @media (max-height: 600px) {
