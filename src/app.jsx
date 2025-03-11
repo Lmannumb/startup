@@ -9,6 +9,7 @@ import { Trading } from './trading/trading';
 import { Home } from './home/home';
 import { Notification } from './notification/notification';
 import { Chat } from './chat/chat';
+import { Signedin } from './signedin/signedin';
 
 export default function App() {
   return (
@@ -32,11 +33,14 @@ export default function App() {
 <Routes>
   <Route path='/' element={<Home />} exact />
   <Route path='/trading' element={<Trading />} />
+  <Route path='/trading/:id' element={<Chat />} exact />
   <Route path='/shop' element={<Shop />} exact />
   <Route path='/garden' element={<Garden />} exact />
   <Route path='/login' element={<Login />} exact />
+  <Route path='/login/:id' element={<Signedin />} exact />
   <Route path='/chat' element={<Chat />} exact />
   <Route path='/notification' element={<Notification />} exact />
+  <Route path='/*' element={<Home />} exact />
 </Routes>
 
     <footer className="text-white-50">
