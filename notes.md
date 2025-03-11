@@ -16,6 +16,10 @@ It went alright.
 
 I be poppin bottles.
 
-##CSS Notes
+## CSS Notes
 
 There is a lot of stuff. A lot of details.
+
+## React 1 Notes
+
+These packages are pretty useful. I haven't even had to actually do anything! Luckily for me everything worked on the second try.
