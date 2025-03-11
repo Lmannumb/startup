@@ -22,4 +22,4 @@ There is a lot of stuff. A lot of details.
 
 ## React 1 Notes
 
-These packages are pretty useful. I haven't even had to actually do anything! Luckily for me everything worked on the second try.
+These packages are pretty useful. I haven't even had to actually do anything! Luckily for me everything worked on the second try. Vite is bundled. Router is implemented. Billions must interact.
