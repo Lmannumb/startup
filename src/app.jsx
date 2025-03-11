@@ -39,7 +39,7 @@ export default function App() {
   <Route path='/login' element={<Login />} exact />
   <Route path='/login/:id' element={<Signedin />} exact />
   <Route path='/chat' element={<Chat />} exact />
-  <Route path='/notification' element={<Notification />} exact />
+  <Route path='/notification/:id' element={<Notification />} exact />
   <Route path='/*' element={<Home />} exact />
 </Routes>
 

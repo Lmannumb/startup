@@ -5,7 +5,7 @@ export function Login() {
     <main class="container-fluid bg-secondary text-center">
         <h2>Login or Register to Idle Garden</h2>
         
-        <form method="get" action="accountsignedin.html">
+        <form method="get" action="login/unimplemented">
           <div class="input-group mb-3">
             <input class="form-control" type="text" placeholder="username" />
           </div>
