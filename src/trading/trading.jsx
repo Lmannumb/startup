@@ -11,7 +11,7 @@ export function Trading() {
         <div><h1>Online</h1></div>
         <div><Link to="BlueCat11">BlueCat11</Link></div>
         <div><h1>Direct Connect</h1></div>
-        <form method="get" action="chat.html">
+        <form method="get" action="chat">
           <div class="input-group mb-3">
             <input class="form-control" type="text" placeholder="username" />
           </div>

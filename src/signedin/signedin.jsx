@@ -7,7 +7,7 @@ export function Signedin() {
         <h2>Notifications</h2>
         <div><Link to="/notification/unimplemented">New messages!</Link> <span class="time">11/20/24 11:30 AM</span></div>
         <div>
-          <form method="get" action="account.html">
+          <form method="get" action="/login">
             <button class="btn btn-primary">Sign Out</button>
           </form>
         </div>
