@@ -8,6 +8,7 @@ export function Chat() {
   const [messages, setMessages] = React.useState([]);
   const [trades, setTrades] = React.useState([]);
   const [message, formUpdate] = React.useState("");
+  const [gardenarray, setGarden] = React.useState([]);
   const [, forceUpdate] = React.useReducer(x => x + 1, 0)
 
   function UpdateForm(value) {
@@ -34,7 +35,7 @@ export function Chat() {
     for (const i of trades) {
       console.log("offer: " + JSON.stringify(i));
       if (i.value !== "-") {
-        offer.push(i.value);
+        offer.push(i);
       }
     }
     var item = {
@@ -75,8 +76,31 @@ export function Chat() {
       console.log("messages: " + messageString);
       setMessages(JSON.parse(messageString));
     }
+    const gardenString = localStorage.getItem('username'+'garden');
+    if (gardenString) {
+      optionarray.splice(0, optionarray.length);
+      //console.log("options: " + gardenString);  selected={i.value === "-"} selected={k.value === i.value}
+      //optionarray.push(
+      //);
+      setGarden(JSON.parse(gardenString));
+    }
   }, []);
 
+  const optionarray = [];
+  for (const k of gardenarray) {
+    var d = false;
+    for (const j of trades) {
+      if (j.value === k.value) {
+        d = true;
+        break;
+      }
+    }
+    var item = <option value={k.value} disabled={d}>{k.name}</option>;
+
+    optionarray.push(
+      item
+    );
+  }
   const messagearray = [];
   if (messages.length) {
     for (const i of messages) {
@@ -93,9 +117,16 @@ export function Chat() {
         messagearray.push(
           <div className={i.you ? "you" : ""}>{i.cont}</div>
         );
+
         for (const j of i.offers) {
+          var obj = {value: "-", name: "Could not find that plant!"};
+          for (const k of gardenarray) {
+            if (j.value === k.value) {
+              obj = k;
+            }
+          }
           messagearray.push(
-            <div className={i.you ? "you" : ""}>{j}</div>
+            <div className={i.you ? "you" : ""}>{obj.name}</div>
           );
         }
         messagearray.push(
@@ -106,20 +137,9 @@ export function Chat() {
   }
   const tradearray = [];
   if (trades.length) {
-    const optionarray = [];
-    const gardenString = localStorage.getItem('username'+'garden');
-    if (gardenString) {
-      console.log("options: " + gardenString);
-      for (const i of JSON.parse(gardenString)) {
-        var item = <option value={i.value}>{i.name}</option>;
-
-        optionarray.push(
-          item
-        );
-      }
-    }
     var j = 0;
     for (const i of trades) {
+      
       console.log("pushing trade: " + JSON.stringify(i));
       var rem = function() {
         const index = j.valueOf();
@@ -133,16 +153,18 @@ export function Chat() {
         const index = j.valueOf();
         return () => {
         console.log("onchange: " + index);
-        trades[index] = { value: document.getElementById("plantlist"+index).value};
+        const p = document.getElementById("plantlist"+index);
+        trades[index] = {value: p.value};
+        //this.value = trades[index].value;
 
-        //forceUpdate();
+        forceUpdate();
         }
       };
-    
+      var def = { label: "--Select a Plant to Offer--", value: "-"};
       tradearray.push(
         <div className="input-group mb-3">
-          <select name={"offer"+j} id={"plantlist"+j}  onChange={onchange()}>
-            <option value="-">--Select a Plant to Offer--</option>
+          <select value={i.value} name={"offer"+j} id={"plantlist"+j} onChange={onchange()}>
+            <option value={"-"}>--Select a Plant to Offer--</option>
             {optionarray}
             </select>
             <Button variant="primary" onClick={rem()}
@@ -168,7 +190,7 @@ export function Chat() {
         <div className="input-group mb-3">
           {tradearray}
       </div>
-      <Button variant="primary" onClick={()=>AddTrade()}>Add Offer (Javascript and Database required)</Button>
+      <Button variant="primary" onClick={()=>AddTrade()}>Add Offer</Button>
       <Button variant="primary" onClick={()=>SendTrade()}>Trade</Button>
     </main>
   );

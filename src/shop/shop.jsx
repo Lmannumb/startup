@@ -15,7 +15,7 @@ export function Shop() {
         image: plant,
         time: "2:00:00"
       },
-      available: true
+      available: 1
     }]));
     
     const shopString = localStorage.getItem('shop');
@@ -34,7 +34,7 @@ export function Shop() {
         const index = j;
         return function () {
           const item = sales[index].item;
-          sales[index].available = false;
+          sales[index].available = sales[index].available-1;
           const a = JSON.parse(localStorage.getItem("username"+"garden"));
           a.push(item);
           localStorage.setItem("username"+"garden", JSON.stringify(a));
