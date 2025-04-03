@@ -13,7 +13,7 @@ export function Shop() {
         worth: 800,
         name: "Basic Plant",
         image: plant,
-        time: "2:00:00"
+        timebegan: "0:00:15"
       },
       available: 1
     }]));
@@ -44,20 +44,21 @@ export function Shop() {
         }
       }
       shoparray.push(
-        <div><h3 style={i.available ? {} : {color : "gray"}}>{i.item.name}</h3></div>
+        <div><h3 className={i.available ? "" : "bought"}>{i.item.name}</h3></div>
       );
       shoparray.push(
         <div><img src={i.item.image} alt="plant for sale did not load!"></img></div>
       );
       shoparray.push(
-        <div style={i.available ? {} : {color : "gray"}}>{"Seed Cost: $"+i.item.cost}</div>
+        <div className={i.available ? "" : "bought"}>{"Seed Cost: $"+i.item.cost}</div>
       );
       shoparray.push(
-        <div style={i.available ? {} : {color : "gray"}}>{"Plant Worth: $"+i.item.worth}</div>
+        <div className={i.available ? "" : "bought"}>{"Plant Worth: $"+i.item.worth}</div>
       );
       shoparray.push(
-        <div style={i.available ? {} : {color : "gray"}}>{"Grow Time: "+i.item.time}</div>
+        <div className={i.available ? "" : "bought"}>{"Grow Time: "+i.item.timebegan}</div>
       );
+      //style={i.available ? {} : {color : "gray"}}
       shoparray.push(
         <Button variant="primary" disabled={!i.available} onClick={buy()}>Buy</Button>
       );

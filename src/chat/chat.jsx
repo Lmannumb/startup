@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom';
 export function Chat() {
   const { id: postid } = useParams();
 
-  const [messages, setMessages] = React.useState([]);
+  const [messages, updateMessages] = React.useState([]);
   const [trades, setTrades] = React.useState([]);
   const [message, formUpdate] = React.useState("");
   const [gardenarray, setGarden] = React.useState([]);
@@ -23,6 +23,7 @@ export function Chat() {
       }
     );
     console.log("trades: " + JSON.stringify(trades));
+
     //localStorage.setItem('messages'+postid, JSON.stringify(messages));
     //setMessages(messages);
     //formUpdate("");
@@ -42,7 +43,8 @@ export function Chat() {
       cont: "Trade",
       offers: offer,
       expired: false,
-      ti: "idk",
+      ti: "10:20 AM",
+      //The time will be set when I set up the third party call
       you: true
     };
     messages.push(
@@ -53,16 +55,22 @@ export function Chat() {
     forceUpdate();
   }
 
-  async function SendMessage() {
-    messages.push(
-      {
-        cont: message,
-        ti: "idk",
-        you: true
-      }
-    )
-    console.log("sending: " + JSON.stringify(messages));
-    localStorage.setItem('messages'+postid, JSON.stringify(messages));
+  function sendMessage(obj, array) {
+    array.push(obj);
+    console.log("sending: " + JSON.stringify(array));
+    localStorage.setItem('messages'+postid, JSON.stringify(array));
+    forceUpdate();
+  }
+
+  function sendEntry() {
+    const obj = 
+    {
+      cont: message,
+      ti: "10:20 AM",
+      //The time will be set when I set up the third party call
+      you: true
+    };
+    sendMessage(obj, messages);
     //setMessages(messages);
     formUpdate("");
   }
@@ -74,15 +82,29 @@ export function Chat() {
     const messageString = localStorage.getItem('messages'+postid);
     if (messageString) {
       console.log("messages: " + messageString);
-      setMessages(JSON.parse(messageString));
+      for(const i of JSON.parse(messageString)) {
+        console.log("push it out " + JSON.stringify(i));
+        messages.push(i);
+      }
     }
+
+    const interval = setInterval(() => {
+      console.log("interval!");
+      sendMessage({cont: "hey!", ti: "10:20 AM", you: false}, messages);
+    }, 10000);
+
     const gardenString = localStorage.getItem('username'+'garden');
     if (gardenString) {
       optionarray.splice(0, optionarray.length);
+      
       //console.log("options: " + gardenString);  selected={i.value === "-"} selected={k.value === i.value}
       //optionarray.push(
       //);
       setGarden(JSON.parse(gardenString));
+    }
+    
+    return function cleanup() {
+      clearInterval(interval);
     }
   }, []);
 
@@ -103,6 +125,7 @@ export function Chat() {
   }
   const messagearray = [];
   if (messages.length) {
+    console.log("messages? " + JSON.stringify(messages));
     for (const i of messages) {
       if (!("offers" in i)) {
         console.log("pushing message: " + JSON.stringify(i));
@@ -185,7 +208,7 @@ export function Chat() {
         <div className="input-group mb-3">
         <input className="form-control" type="text" placeholder="message" onChange={(e) => UpdateForm(e.target.value)}/>
           <Button variant="primary"  
-            onClick={() => SendMessage()} disabled={message === ""}>Send</Button>
+            onClick={() => sendEntry()} disabled={message === ""}>Send</Button>
         </div>
         <div className="input-group mb-3">
           {tradearray}

@@ -90,6 +90,10 @@ a {
     margin-left: 20vw;
   }
 
+  .bought {
+    color : hsl(120, 30%, 50%)
+  }
+
   .homepagestuff {
     display:flex;
     flex-direction: row;
