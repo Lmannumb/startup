@@ -34,7 +34,7 @@ export function Login({userName: U, changeUsername}) {
  : (<div>
       <h1>Welcome {U}</h1>
      <div>
-         <Button variant="primary" onClick={()=>{setUserName("");changeUsername("");}}>Sign Out</Button>
+         <Button variant="primary" onClick={()=>{localStorage.setItem("username", '');setUserName("");changeUsername("");}}>Sign Out</Button>
      </div>
    </div>)
   }

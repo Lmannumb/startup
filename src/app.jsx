@@ -15,6 +15,12 @@ export default function App() {
   const [username, setUsername] = React.useState(localStorage.getItem('username') || '');
   const [password, setPassword] = React.useState("");
 
+  React.useEffect(()=>{
+    if (!localStorage.getItem('username')) {
+      localStorage.setItem('username','');
+    }
+  },[]);
+
   return (
     <BrowserRouter>
 <div className="body bg-dark text-light">
@@ -25,9 +31,9 @@ export default function App() {
         <a className="navbar-brand" href="#">Idle Garden</a>
         <menu className="navbar-nav">
           <li className="nav-item"><NavLink className='nav-link' to=''>Home</NavLink></li>
-          <li className="nav-item"><NavLink className='nav-link' to='trading'>Trading</NavLink></li>
-          <li className="nav-item"><NavLink className='nav-link' to='shop'>Shop</NavLink></li>
-          <li className="nav-item"><NavLink className='nav-link' to='garden'>Garden</NavLink></li>
+          <li className="nav-item"><NavLink className='nav-link' to={username === '' ? 'login' : 'trading'}>Trading</NavLink></li>
+          <li className="nav-item"><NavLink className='nav-link' to={username === '' ? 'login' : 'shop'}>Shop</NavLink></li>
+          <li className="nav-item"><NavLink className='nav-link' to={username === '' ? 'login' : 'garden'}>Garden</NavLink></li>
           <li className="nav-item"><NavLink className='nav-link' to='login'>Login</NavLink></li>
         </menu>
       </nav>

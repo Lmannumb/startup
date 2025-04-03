@@ -3,14 +3,14 @@ import ReactDOM from 'react-dom/client';
 import { Time } from '/src/time.jsx';
 import Button from 'react-bootstrap/Button';
 
-export function Garden() {
+export function Garden({userName: U}) {
   const [plants, updatePlants] = React.useState([]);
   const [timeElapsed, setTime] = React.useState(0);
   const [money, setMoney] = React.useState(0);
   
   React.useEffect(()=>{
     new Time("00:00:00");
-    /*localStorage.setItem("username"+"garden", JSON.stringify(
+    /*localStorage.setItem(U+"garden", JSON.stringify(
       [{
         value: "0",
         name: "Basic Plant",
@@ -26,17 +26,17 @@ export function Garden() {
         worth: "$10"
       }]
     ));*/
-    let moneystring = localStorage.getItem('username'+'balance');
+    let moneystring = localStorage.getItem(U+'balance');
     if (moneystring !== null) {
     }
     else {
       console.log("setting money to 0");
       moneystring = "0";
-      localStorage.setItem('username'+'balance', "0");
+      localStorage.setItem(U+'balance', "0");
     }
     console.log("money " + moneystring);
     setMoney(parseInt(moneystring));
-    const gardenString = localStorage.getItem('username'+'garden');
+    const gardenString = localStorage.getItem(U+'garden');
     if (gardenString) {
       console.log("plants: " + gardenString);
       updatePlants(JSON.parse(gardenString));
@@ -88,11 +88,11 @@ export function Garden() {
         const redeem = function () {
           let index = plants.indexOf(i);
           return () => {
-            localStorage.setItem('username'+'balance', money + plants[index].worth);
+            localStorage.setItem(U+'balance', money + plants[index].worth);
             setMoney(money + plants[index].worth);
             plants.splice(index, 1);
-            localStorage.setItem('username'+'garden', JSON.stringify(plants));
-            updatePlants(JSON.parse(localStorage.getItem('username'+'garden')));
+            localStorage.setItem(U+'garden', JSON.stringify(plants));
+            updatePlants(JSON.parse(localStorage.getItem(U+'garden')));
           };
         };
         gardenarray.push(

@@ -2,7 +2,7 @@ import React from 'react';
 import Button from 'react-bootstrap/Button';
 import plant from '/exampleplant.png';
 
-export function Shop() {
+export function Shop({userName: U}) {
   const [sales, setSales] = React.useState([]);
   const [, forceUpdate] = React.useReducer(x => x + 1, 0)
 
@@ -34,14 +34,14 @@ export function Shop() {
         return function () {
           const item = sales[index].item;
           sales[index].available = sales[index].available-1;
-          let astr = localStorage.getItem("username"+"garden");
+          let astr = localStorage.getItem(U+"garden");
           if (!astr) {
-            localStorage.setItem('username'+'garden', "[]");
+            localStorage.setItem(U+'garden', "[]");
             astr = "[]";
           }
           const a = JSON.parse(astr);
           a.push(item);
-          localStorage.setItem("username"+"garden", JSON.stringify(a));
+          localStorage.setItem(U+"garden", JSON.stringify(a));
           setSales(sales);
           console.log("buy " + index);
           forceUpdate();
