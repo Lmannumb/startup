@@ -12,7 +12,7 @@ import { Chat } from './chat/chat';
 //import { Signedin } from './signedin/signedin';
 
 export default function App() {
-  const [username, setUsername] = React.useState("");
+  const [username, setUsername] = React.useState(localStorage.getItem('username') || '');
   const [password, setPassword] = React.useState("");
 
   return (
