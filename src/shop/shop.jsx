@@ -27,15 +27,19 @@ export function Shop() {
 
   const shoparray = [];
   if (sales.length) {
-    var j = 0;
     for (const i of sales) {
       console.log("pushing offer: " + JSON.stringify(i));
       function buy() {
-        const index = j;
+        const index = sales.indexOf(i);
         return function () {
           const item = sales[index].item;
           sales[index].available = sales[index].available-1;
-          const a = JSON.parse(localStorage.getItem("username"+"garden"));
+          let astr = localStorage.getItem("username"+"garden");
+          if (!astr) {
+            localStorage.setItem('username'+'garden', "[]");
+            astr = "[]";
+          }
+          const a = JSON.parse(astr);
           a.push(item);
           localStorage.setItem("username"+"garden", JSON.stringify(a));
           setSales(sales);
@@ -58,11 +62,9 @@ export function Shop() {
       shoparray.push(
         <div className={i.available ? "" : "bought"}>{"Grow Time: "+i.item.timebegan}</div>
       );
-      //style={i.available ? {} : {color : "gray"}}
       shoparray.push(
         <Button variant="primary" disabled={!i.available} onClick={buy()}>Buy</Button>
       );
-      j++;
     }
   }
 

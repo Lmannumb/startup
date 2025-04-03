@@ -37,8 +37,8 @@ export default function App() {
   <Route path='/' element={<Home />} exact />
   <Route path='/trading' element={<Trading />} />
   <Route path='/trading/:id' element={<Chat />} exact />
-  <Route path='/shop' element={<Shop />} exact />
-  <Route path='/garden' element={<Garden />} exact />
+  <Route path='/shop' element={<Shop userName={username}/>} exact />
+  <Route path='/garden' element={<Garden userName={username}/>} exact />
   <Route path='/login' element={<Login 
     userName={username} changeUsername={(str)=>{
       setUsername(str);
