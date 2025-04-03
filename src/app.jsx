@@ -9,9 +9,12 @@ import { Trading } from './trading/trading';
 import { Home } from './home/home';
 import { Notification } from './notification/notification';
 import { Chat } from './chat/chat';
-import { Signedin } from './signedin/signedin';
+//import { Signedin } from './signedin/signedin';
 
 export default function App() {
+  const [username, setUsername] = React.useState("");
+  const [password, setPassword] = React.useState("");
+
   return (
     <BrowserRouter>
 <div className="body bg-dark text-light">
@@ -36,8 +39,10 @@ export default function App() {
   <Route path='/trading/:id' element={<Chat />} exact />
   <Route path='/shop' element={<Shop />} exact />
   <Route path='/garden' element={<Garden />} exact />
-  <Route path='/login' element={<Login />} exact />
-  <Route path='/login/:id' element={<Signedin />} exact />
+  <Route path='/login' element={<Login 
+    userName={username} changeUsername={(str)=>{
+      setUsername(str);
+    }}/>} exact />
   <Route path='/chat' element={<Chat />} exact />
   <Route path='/chat/:id' element={<Chat />} exact />
   <Route path='/notification/:id' element={<Notification />} exact />
@@ -54,3 +59,4 @@ export default function App() {
   </BrowserRouter>
   );
 }
+//<Route path='/login/:id' element={<Login />} exact />
