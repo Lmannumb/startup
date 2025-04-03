@@ -23,3 +23,7 @@ There is a lot of stuff. A lot of details.
 ## React 1 Notes
 
 These packages are pretty useful. I haven't even had to actually do anything! Luckily for me everything worked on the second try. Vite is bundled. Router is implemented. Billions must interact.
+
+## React 2 Notes
+
+Goodness Gracious, I hate working with javascript. I was trying to fix a problem with react states for a solid 2 hour period, and when I came back after a break, the bug was gone, and I have not seen it since.
