@@ -7,13 +7,41 @@ export function Login({userName: U, changeUsername}) {
   const [password, setPassword] = React.useState('');
 
   async function Login() {
-    localStorage.setItem('username', userName);
-    changeUsername(userName);
+    loginOrCreate("api/auth/login");
   }
 
   async function Register() {
-    localStorage.setItem('username', userName);
-    changeUsername(userName);
+    loginOrCreate("api/auth/create");
+  }
+
+  function Logout() {
+    fetch(`/api/auth/logout`, {
+      method: 'delete',
+    })
+      .catch(() => {
+        // Logout failed. Assuming offline
+      })
+      .finally(() => {
+        localStorage.removeItem('userName');
+        props.onLogout();
+      });
+  }
+
+  async function loginOrCreate(endpoint) {
+    const response = await fetch(endpoint, {
+      method: 'post',
+      body: JSON.stringify({ email: userName, password: password }),
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8',
+      },
+    });
+    if (response?.status === 200) {
+      localStorage.setItem('userName', userName);
+      props.onLogin(userName);
+    } else {
+      const body = await response.json();
+      setDisplayError(`⚠ Error: ${body.msg}`);
+    }
   }
 
   return (
@@ -34,7 +62,7 @@ export function Login({userName: U, changeUsername}) {
  : (<div>
       <h1>Welcome {U}</h1>
      <div>
-         <Button variant="primary" onClick={()=>{localStorage.setItem("username", '');setUserName("");changeUsername("");}}>Sign Out</Button>
+         <Button variant="primary" onClick={()=>{Logout();}}>Sign Out</Button>
      </div>
    </div>)
   }
