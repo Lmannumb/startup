@@ -23,7 +23,7 @@ export function Login({userName: U, changeUsername}) {
       })
       .finally(() => {
         localStorage.removeItem('userName');
-        props.onLogout();
+        changeUsername("");
       });
   }
 
@@ -37,7 +37,7 @@ export function Login({userName: U, changeUsername}) {
     });
     if (response?.status === 200) {
       localStorage.setItem('userName', userName);
-      props.onLogin(userName);
+      changeUsername(userName);
     } else {
       const body = await response.json();
       setDisplayError(`⚠ Error: ${body.msg}`);
