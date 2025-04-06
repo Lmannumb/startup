@@ -53,6 +53,74 @@ apiRouter.delete('/auth/logout', async (req, res) => {
   res.status(204).end();
 });
 
+let gardens = [];
+
+apiRouter.get('/garden', async (req, res) => {
+  const user = await findUser('token', req.cookies[authCookieName]);
+  if (user) {
+    console.log("user " + user.email);
+    const garden = gardens.find((u)=>u["token"] === user.token);
+    if (garden) {
+      res.send(garden);
+    } else {
+      gardens.push({token: user.token, garden: JSON.stringify([])});
+      res.send([]);
+    }
+    //res.send(gardens);
+  } else {
+    res.status(401).send({ msg: 'Unauthorized' });
+  }
+  console.log("garden/get: " + JSON.stringify(gardens));
+});
+
+apiRouter.post('/garden', async (req, res) => {
+  console.log("garden post");
+  const user = await findUser('token', req.cookies[authCookieName]);
+  if (user) {
+    const garden = gardens.find((u)=>u["token"] === user.token);
+    if (garden) {
+    } else {
+      gardens.push({token: user.token, garden: JSON.stringify([])});
+    }
+  } else {
+    res.status(401).send({ msg: 'Unauthorized' });
+  }
+  console.log("garden/post: " + JSON.stringify(gardens));
+});
+
+let shop = [{
+  item: {
+    cost: 98,
+    worth: 800,
+    name: "Basic Plant",
+    image: "/exampleplant.png",
+    timebegan: "0:00:15"
+  },
+  available: 1,
+  buys: []
+}];
+
+apiRouter.get('/shop', async (req, res) => {
+  res.send(shop);
+  console.log("garden/get: " + JSON.stringify(gardens));
+});
+
+apiRouter.post('/shop', async (req, res) => {
+  const user = await findUser('token', req.cookies[authCookieName]);
+  if (user) {
+    const item = shop[req.index];
+    const buy = item["buys"].find((u)=>u["token"] === user.token);
+    if (buy) {
+      buy.count = buy.count + 1;
+    } else {
+      item["buys"].push({token: req.cookies[authCookieName], count: 1});
+    }
+  }else {
+    res.status(401).send({ msg: 'Unauthorized' });
+  }
+  console.log("shop/post: " + JSON.stringify(gardens));
+});
+
 const verifyAuth = async (req, res, next) => {
   const user = await findUser('token', req.cookies[authCookieName]);
   if (user) {
