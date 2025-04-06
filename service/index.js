@@ -53,12 +53,6 @@ apiRouter.delete('/auth/logout', async (req, res) => {
   res.status(204).end();
 });
 
-apiRouter.get('/token', async (req, res) => {
-  const user = await findUser('token', req.cookies[authCookieName]);
-  if (user) {
-  }
-});
-
 let gardens = [];
 
 apiRouter.get('/garden', async (req, res) => {
@@ -108,8 +102,37 @@ let shop = [{
 }];
 
 apiRouter.get('/shop', async (req, res) => {
-  res.send(shop);
-  console.log("shop/get: " + JSON.stringify(shop));
+  let t = "";
+  const user = await findUser('token', req.cookies[authCookieName]);
+  if (user) {
+    t = req.cookies[authCookieName];
+  }
+  let sendshop = [];
+  //console.log(JSON.stringify(shop));
+  for (const i of shop) {
+    /*let sendbuys = [];
+    for (const j in i.buys) {
+      sendbuyss.push({
+        userName: 
+      });
+    }*/
+   //console.log(i);
+   //console.log(JSON.stringify(i));
+    const buy = i["buys"].find((u)=>u["token"] === t);
+    let num = 0;
+    if (buy) {
+      num = buy.count;
+    } else {
+      i["buys"].push({token: req.cookies[authCookieName], count: 0});
+    }
+    sendshop.push({
+      item: i.item,
+      available: i.available,
+      buys: num,
+    });
+  }
+  res.send(sendshop);
+  //console.log("shop/get: " + JSON.stringify(shop));
 });
 
 apiRouter.post('/shop', async (req, res) => {
@@ -125,7 +148,7 @@ apiRouter.post('/shop', async (req, res) => {
   }else {
     res.status(401).send({ msg: 'Unauthorized' });
   }
-  console.log("shop/post: " + JSON.stringify(gardens));
+  console.log("shop/post: " + JSON.stringify(shop));
 });
 
 const verifyAuth = async (req, res, next) => {

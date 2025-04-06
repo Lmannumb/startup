@@ -71,16 +71,19 @@ export function Shop({userName: U}) {
         const index = sales.indexOf(i);
         return function () {
           const item = sales[index].item;
-          const p = async (req, res) => {
-            const response = await fetch('/api/shop', {
+          fetch('/api/shop', {
               method: 'post',
               body: JSON.stringify({ "index": index, count: 1}),
               headers: {
                 'Content-type': 'application/json; charset=UTF-8',
               },
-            })
-          };
-          sales[index]
+            });
+          sales[index].buys = sales[index].buys + 1;
+          fetch('api/garden', {
+            method: "get"
+          })
+          .then((result)=>result.json())
+          ;
           /*sales[index].available = sales[index].available-1;
           let astr = localStorage.getItem(U+"garden");
           if (!astr) {
@@ -95,21 +98,21 @@ export function Shop({userName: U}) {
           forceUpdate();
         }
       }
-      const b = i.available > 
+      const b = i.available > i.buys;
       shoparray.push(
-        <div><h3 className={i.available ? "" : "bought"}>{i.item.name}</h3></div>
+        <div><h3 className={b ? "" : "bought"}>{i.item.name}</h3></div>
       );
       shoparray.push(
         <div><img src={i.item.image} alt="plant for sale did not load!"></img></div>
       );
       shoparray.push(
-        <div className={i.available ? "" : "bought"}>{"Seed Cost: $"+i.item.cost}</div>
+        <div className={b ? "" : "bought"}>{"Seed Cost: $"+i.item.cost}</div>
       );
       shoparray.push(
-        <div className={i.available ? "" : "bought"}>{"Plant Worth: $"+i.item.worth}</div>
+        <div className={b ? "" : "bought"}>{"Plant Worth: $"+i.item.worth}</div>
       );
       shoparray.push(
-        <div className={i.available ? "" : "bought"}>{"Grow Time: "+i.item.timebegan}</div>
+        <div className={b ? "" : "bought"}>{"Grow Time: "+i.item.timebegan}</div>
       );
       shoparray.push(
         <Button variant="primary" disabled={!i.available} onClick={buy()}>Buy</Button>
