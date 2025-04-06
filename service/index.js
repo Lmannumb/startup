@@ -53,18 +53,22 @@ apiRouter.delete('/auth/logout', async (req, res) => {
   res.status(204).end();
 });
 
+const defaultbalance = 300;
 let gardens = [];
 
 apiRouter.get('/garden', async (req, res) => {
   const user = await findUser('token', req.cookies[authCookieName]);
   if (user) {
-    console.log("user " + user.email);
-    const garden = gardens.find((u)=>u["token"] === user.token);
-    if (garden) {
-      res.send(garden);
+    //console.log("user " + user.email);
+    const g = gardens.find((u)=>u["token"] === user.token);
+    if (g) {
+      console.log("garden/get inner: " + JSON.stringify(g));
+      res.send(Object.fromEntries(
+        Object.entries(g).filter(([key]) => key !== 'token')
+      ));
     } else {
-      gardens.push({token: user.token, balance: 0, garden: JSON.stringify([])});
-      res.send([]);
+      gardens.push({token: user.token, balance: 300, garden: JSON.stringify([])});
+      res.send({ balance: 300, garden: []});
     }
     //res.send(gardens);
   } else {
@@ -79,9 +83,12 @@ apiRouter.post('/garden', async (req, res) => {
   if (user) {
     let garden = gardens.find((u)=>u["token"] === user.token);
     if (garden) {
-      garden = req.body;
+      for (const i of Object.keys(req.body)) {
+        console.log(i);
+        gardens[gardens.indexOf(garden)][i] = req.body[i];
+      }
     } else {
-      gardens.push({token: user.token, balance: 0, garden: JSON.stringify([])});
+      gardens.push({token: user.token, balance: 300, garden: JSON.stringify([])});
     }
   } else {
     res.status(401).send({ msg: 'Unauthorized' });
@@ -91,12 +98,13 @@ apiRouter.post('/garden', async (req, res) => {
 
 let shop = [{
   item: {
-    cost: 98,
     worth: 800,
     name: "Basic Plant",
-    image: "/exampleplant.png",
+    //image: "/exampleplant.png",
+    image: "idk",
     timebegan: "0:00:15"
   },
+  cost: 98,
   available: 1,
   buys: []
 }];
@@ -126,6 +134,7 @@ apiRouter.get('/shop', async (req, res) => {
       i["buys"].push({token: req.cookies[authCookieName], count: 0});
     }
     sendshop.push({
+      cost: i.cost,
       item: i.item,
       available: i.available,
       buys: num,
@@ -142,8 +151,10 @@ apiRouter.post('/shop', async (req, res) => {
     const buy = item["buys"].find((u)=>u["token"] === user.token);
     if (buy) {
       buy.count = buy.count + req.body.count;
+      res.send({ msg: `Changed shop buys at ${req.body.index} to ${buy.count}` });
     } else {
       item["buys"].push({token: req.cookies[authCookieName], count: req.body.count});
+      res.send({ msg: `Created a shop buy at ${req.body.index} with ${req.body.count}` });
     }
   }else {
     res.status(401).send({ msg: 'Unauthorized' });

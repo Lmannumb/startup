@@ -6,6 +6,7 @@ export function Shop({userName: U}) {
   const [sales, setSales] = React.useState([]);
   const [, forceUpdate] = React.useReducer(x => x + 1, 0)
   const [token, setToken] = React.useState("");
+  const [balance, setBalance] = React.useState(0);
 
   React.useEffect(()=>{
     /*localStorage.setItem("shop", JSON.stringify([{
@@ -53,14 +54,35 @@ export function Shop({userName: U}) {
     })
     .catch((err) => console.log(`Error: ${err}`))
     .finally(() => {
-
     });
 
-    /*const shopString = localStorage.getItem('shop');
-    if (shopString) {
-      console.log("offers: " + shopString);
-      setSales(JSON.parse(shopString));
-    }*/
+    console.log("GetGarden");
+    fetch('/api/garden', {
+      method: 'get',
+    })
+    .then((result)=>result.json())
+    .then((result)=>{
+      if (result) {
+        //result.json();
+        //console.log('GetGarden promise ' + JSON.stringify(result));
+        //console.log('GetGarden promise ' + result.balance);
+        setBalance(0 + result["balance"]);
+      } else {
+        setBalance(0);
+        /*fetch('/api/garden', {
+          method: 'post',
+          body: JSON.stringify({ email: U}),
+          headers: {
+            'Content-type': 'application/json; charset=UTF-8',
+          },
+        });*/
+      }
+      //if ()
+    })
+    .catch((err) => console.log(`Error: ${err}`))
+    .finally(() => {
+      //console.log(balance);
+    });
   },[]);
 
   const shoparray = [];
@@ -76,14 +98,40 @@ export function Shop({userName: U}) {
               body: JSON.stringify({ "index": index, count: 1}),
               headers: {
                 'Content-type': 'application/json; charset=UTF-8',
-              },
+              }
             });
           sales[index].buys = sales[index].buys + 1;
-          fetch('api/garden', {
+          fetch('/api/garden', {
             method: "get"
           })
           .then((result)=>result.json())
-          ;
+          .then((result)=>{
+            console.log("result " + JSON.stringify(result));
+            //let newg = [];
+            //for (const i of result)
+            const g = JSON.parse(result.garden)
+            g.push(item);
+            console.log("g " + JSON.stringify(g));
+            result.garden = g;
+            result.balance = result.balance - sales[index].cost
+            console.log("result " + JSON.stringify(result));
+            fetch('/api/garden', {
+              method: "post",
+              body: JSON.stringify(result),
+              headers: {
+                'Content-type': 'application/json; charset=UTF-8',
+              },
+            })
+            .then((result)=>result.json())
+            .then((result)=>{
+              console.log("result " + JSON.stringify(result));
+            });
+            setBalance(result.balance);
+          })
+          .catch((err) => console.log(`Error: ${err}`))
+          .finally(() => {
+
+          });
           /*sales[index].available = sales[index].available-1;
           let astr = localStorage.getItem(U+"garden");
           if (!astr) {
@@ -98,7 +146,7 @@ export function Shop({userName: U}) {
           forceUpdate();
         }
       }
-      const b = i.available > i.buys;
+      const b = i.available > i.buys && i.cost < balance;
       shoparray.push(
         <div><h3 className={b ? "" : "bought"}>{i.item.name}</h3></div>
       );
@@ -106,13 +154,16 @@ export function Shop({userName: U}) {
         <div><img src={i.item.image} alt="plant for sale did not load!"></img></div>
       );
       shoparray.push(
-        <div className={b ? "" : "bought"}>{"Seed Cost: $"+i.item.cost}</div>
+        <div className={b ? "" : "bought"}>{"Seed Cost: $"+i.cost}</div>
       );
       shoparray.push(
         <div className={b ? "" : "bought"}>{"Plant Worth: $"+i.item.worth}</div>
       );
       shoparray.push(
         <div className={b ? "" : "bought"}>{"Grow Time: "+i.item.timebegan}</div>
+      );
+      shoparray.push(
+        <div className={b ? "" : "bought"}>{"In Stock: "+(i.available-i.buys)}</div>
       );
       shoparray.push(
         <Button variant="primary" disabled={!i.available} onClick={buy()}>Buy</Button>
@@ -122,6 +173,7 @@ export function Shop({userName: U}) {
 
   return (
     <main className="container-fluid bg-secondary text-center">
+      <h1>Balance: ${balance}</h1>
       {shoparray}
       </main>
   );

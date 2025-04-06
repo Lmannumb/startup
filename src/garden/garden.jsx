@@ -50,7 +50,8 @@ export function Garden({userName: U}) {
         if (result) {
           //result.json();
           console.log('GetGarden promise ' + JSON.stringify(result));
-          updatePlants(JSON.parse(result.garden));
+          updatePlants(result.garden);
+          setMoney(result.balance);
         } else {
           updatePlants([]);
           fetch('/api/garden', {
