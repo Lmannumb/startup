@@ -129,11 +129,46 @@ export function Garden({userName: U}) {
         const redeem = function () {
           let index = plants.indexOf(i);
           return () => {
-            localStorage.setItem(U+'balance', money + plants[index].worth);
+            const item = plants[index].item;
+            fetch('/api/garden', {
+              method: "get"
+            })
+            .then((result)=>result.json())
+            .then((result)=>{
+              console.log("result " + JSON.stringify(result));
+              //let newg = [];
+              //for (const i of result)
+              const g = result.garden
+              g.splice(g.indexOf(item), 1);
+              console.log("g " + JSON.stringify(g));
+              result.garden = g;
+              updatePlants(g);
+              result.balance = result.balance + plants[index].worth;
+              setMoney(result.balance);
+              console.log("result " + JSON.stringify(result));
+              fetch('/api/garden', {
+                method: "post",
+                body: JSON.stringify(result),
+                headers: {
+                  'Content-type': 'application/json; charset=UTF-8',
+                },
+              })
+              .then((result)=>result.json())
+              .then((result)=>{
+                console.log("result " + JSON.stringify(result));
+              });
+              setMoney(result.balance);
+            })
+            .catch((err) => console.log(`Error: ${err}`))
+            .finally(() => {
+
+            });
+            console.log("buy " + index);
+            /*localStorage.setItem(U+'balance', money + plants[index].worth);
             setMoney(money + plants[index].worth);
             plants.splice(index, 1);
             localStorage.setItem(U+'garden', JSON.stringify(plants));
-            updatePlants(JSON.parse(localStorage.getItem(U+'garden')));
+            updatePlants(JSON.parse(localStorage.getItem(U+'garden')));*/
           };
         };
         gardenarray.push(
