@@ -5,9 +5,10 @@ import plant from '/exampleplant.png';
 export function Shop({userName: U}) {
   const [sales, setSales] = React.useState([]);
   const [, forceUpdate] = React.useReducer(x => x + 1, 0)
+  const [token, setToken] = React.useState("");
 
   React.useEffect(()=>{
-    localStorage.setItem("shop", JSON.stringify([{
+    /*localStorage.setItem("shop", JSON.stringify([{
       item: {
         cost: 98,
         worth: 800,
@@ -16,13 +17,50 @@ export function Shop({userName: U}) {
         timebegan: "0:00:15"
       },
       available: 1
-    }]));
+    }]));*/
     
-    const shopString = localStorage.getItem('shop');
+    const p = async ()=>{
+      const response = await fetch('/api/shop', {
+        method: 'get',
+      });
+      if (response?.status === 200) {
+        console.log("response 200 " + response);
+        return response;
+      } else {
+        console.log("error at GetShop: " + JSON.stringify(await response.json()));
+        //setDisplayError(`⚠ Error: ${body.msg}`);
+      }
+    };
+    p()
+    .then((result)=>result.json())
+    .then((result)=>{
+      console.log(result);
+      if (result) {
+        //let j = result.json();
+        console.log('GetShop promise ' + result);
+        setSales(result);
+      } else {
+        setSales([]);
+        fetch('/api/garden', {
+          method: 'post',
+          body: JSON.stringify({ email: U}),
+          headers: {
+            'Content-type': 'application/json; charset=UTF-8',
+          },
+        });
+      }
+      //if ()
+    })
+    .catch((err) => console.log(`Error: ${err}`))
+    .finally(() => {
+
+    });
+
+    /*const shopString = localStorage.getItem('shop');
     if (shopString) {
       console.log("offers: " + shopString);
       setSales(JSON.parse(shopString));
-    }
+    }*/
   },[]);
 
   const shoparray = [];
@@ -33,7 +71,17 @@ export function Shop({userName: U}) {
         const index = sales.indexOf(i);
         return function () {
           const item = sales[index].item;
-          sales[index].available = sales[index].available-1;
+          const p = async (req, res) => {
+            const response = await fetch('/api/shop', {
+              method: 'post',
+              body: JSON.stringify({ "index": index, count: 1}),
+              headers: {
+                'Content-type': 'application/json; charset=UTF-8',
+              },
+            })
+          };
+          sales[index]
+          /*sales[index].available = sales[index].available-1;
           let astr = localStorage.getItem(U+"garden");
           if (!astr) {
             localStorage.setItem(U+'garden', "[]");
@@ -42,11 +90,12 @@ export function Shop({userName: U}) {
           const a = JSON.parse(astr);
           a.push(item);
           localStorage.setItem(U+"garden", JSON.stringify(a));
-          setSales(sales);
+          setSales(sales);*/
           console.log("buy " + index);
           forceUpdate();
         }
       }
+      const b = i.available > 
       shoparray.push(
         <div><h3 className={i.available ? "" : "bought"}>{i.item.name}</h3></div>
       );

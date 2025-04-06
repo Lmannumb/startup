@@ -53,6 +53,12 @@ apiRouter.delete('/auth/logout', async (req, res) => {
   res.status(204).end();
 });
 
+apiRouter.get('/token', async (req, res) => {
+  const user = await findUser('token', req.cookies[authCookieName]);
+  if (user) {
+  }
+});
+
 let gardens = [];
 
 apiRouter.get('/garden', async (req, res) => {
@@ -63,7 +69,7 @@ apiRouter.get('/garden', async (req, res) => {
     if (garden) {
       res.send(garden);
     } else {
-      gardens.push({token: user.token, garden: JSON.stringify([])});
+      gardens.push({token: user.token, balance: 0, garden: JSON.stringify([])});
       res.send([]);
     }
     //res.send(gardens);
@@ -77,10 +83,11 @@ apiRouter.post('/garden', async (req, res) => {
   console.log("garden post");
   const user = await findUser('token', req.cookies[authCookieName]);
   if (user) {
-    const garden = gardens.find((u)=>u["token"] === user.token);
+    let garden = gardens.find((u)=>u["token"] === user.token);
     if (garden) {
+      garden = req.body;
     } else {
-      gardens.push({token: user.token, garden: JSON.stringify([])});
+      gardens.push({token: user.token, balance: 0, garden: JSON.stringify([])});
     }
   } else {
     res.status(401).send({ msg: 'Unauthorized' });
@@ -102,18 +109,18 @@ let shop = [{
 
 apiRouter.get('/shop', async (req, res) => {
   res.send(shop);
-  console.log("garden/get: " + JSON.stringify(gardens));
+  console.log("shop/get: " + JSON.stringify(shop));
 });
 
 apiRouter.post('/shop', async (req, res) => {
   const user = await findUser('token', req.cookies[authCookieName]);
   if (user) {
-    const item = shop[req.index];
+    const item = shop[req.body.index];
     const buy = item["buys"].find((u)=>u["token"] === user.token);
     if (buy) {
-      buy.count = buy.count + 1;
+      buy.count = buy.count + req.body.count;
     } else {
-      item["buys"].push({token: req.cookies[authCookieName], count: 1});
+      item["buys"].push({token: req.cookies[authCookieName], count: req.body.count});
     }
   }else {
     res.status(401).send({ msg: 'Unauthorized' });

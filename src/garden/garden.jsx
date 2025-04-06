@@ -45,12 +45,12 @@ export function Garden({userName: U}) {
       }]
     ));*/
     const gpromise = GetGarden()
-      //.then((result)=>{})
+      .then((result)=>result.json())
       .then((result)=>{
         if (result) {
-          result.json();
+          //result.json();
           console.log('GetGarden promise ' + JSON.stringify(result));
-          updatePlants(result);
+          updatePlants(JSON.parse(result.garden));
         } else {
           updatePlants([]);
           fetch('/api/garden', {
