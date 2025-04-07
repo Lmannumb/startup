@@ -21,7 +21,7 @@
   "homepage": "https://github.com/Lmannumb/startup#readme",
   "dependencies": {
     "bootstrap": "^5.3.3",
-    "give-me-a-joke": "^0.5.1",
+    "give-me-a-joke": "^0.3.2",
     "react": "^19.0.0",
     "react-bootstrap": "^2.10.9",
     "react-dom": "^19.0.0",

@@ -50,11 +50,12 @@ export function Login({userName: U, changeUsername}) {
       method: 'delete',
     })
       .catch(() => {
-        // Logout failed. Assuming offline
+        changeUsername(undefined);
+        localStorage.removeItem('userName');
       })
       .finally(() => {
-        localStorage.removeItem('userName');
         changeUsername(undefined);
+        localStorage.removeItem('userName');
       });
   }
 

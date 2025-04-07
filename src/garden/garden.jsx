@@ -33,6 +33,7 @@ export function Garden({userName: U}) {
       .then((result)=>{
         if (result) {
           //result.json();
+          console.log('GetGarden promise ' + result);
           console.log('GetGarden promise ' + JSON.stringify(result));
           updatePlants(result.garden);
           setMoney(result.balance);
@@ -46,27 +47,11 @@ export function Garden({userName: U}) {
             },
           });
         }
-        //if ()
       })
       .catch((err) => console.log(`Error: ${err}`))
       .finally(() => {
 
       });
-    /*let moneystring = localStorage.getItem(U+'balance');
-    if (moneystring !== null) {
-    }
-    else {
-      console.log("setting money to 0");
-      moneystring = "0";
-      localStorage.setItem(U+'balance', "0");
-    }
-    console.log("money " + moneystring);
-    setMoney(parseInt(moneystring));*/
-    /*const gardenString = localStorage.getItem(U+'garden');
-    if (gardenString) {
-      console.log("plants: " + gardenString);
-      updatePlants(JSON.parse(gardenString));
-    }*/
     let interval;
     fetch('/api/time', {method:"get"})
     .then((result)=>result.json())

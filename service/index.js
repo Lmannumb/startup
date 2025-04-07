@@ -77,7 +77,7 @@ apiRouter.get('/garden', async (req, res) => {
         Object.entries(g).filter(([key]) => key !== 'token')
       ));
     } else {
-      gardens.push({token: user.token, balance: defaultbalance, garden: JSON.stringify([])});
+      gardens.push({token: user.token, balance: defaultbalance, garden: []});
       res.send({ balance: defaultbalance, garden: []});
     }
     //res.send(gardens);
@@ -98,7 +98,7 @@ apiRouter.post('/garden', async (req, res) => {
         gardens[gardens.indexOf(garden)][i] = req.body[i];
       }
     } else {
-      gardens.push({token: user.token, balance: defaultbalance, garden: JSON.stringify([])});
+      gardens.push({token: user.token, balance: defaultbalance, garden: []});
     }
   } else {
     res.status(401).send({ msg: 'Unauthorized' });
@@ -304,7 +304,7 @@ apiRouter.get('/scores', verifyAuth, (_req, res) => {
   res.send(scores);
 });
 
-const port = process.argv.length > 2 ? process.argv[2] : 3000;
+const port = process.argv.length > 2 ? process.argv[2] : 4000;
 
 app.listen(port, () => {
   console.log(`Listening on port ${port}`);
