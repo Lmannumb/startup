@@ -156,10 +156,75 @@ apiRouter.post('/shop', async (req, res) => {
       item["buys"].push({token: req.cookies[authCookieName], count: req.body.count});
       res.send({ msg: `Created a shop buy at ${req.body.index} with ${req.body.count}` });
     }
-  }else {
+  } else {
     res.status(401).send({ msg: 'Unauthorized' });
   }
   console.log("shop/post: " + JSON.stringify(shop));
+});
+
+trades = [];
+
+apiRouter.post('/chat', async (req, res) => {
+  res.cookie('chat', req.body.postid, {
+    secure: true,
+    httpOnly: true,
+    sameSite: 'strict',
+  });
+  console.log("chat cookie " + req.body.postid);
+  res.send({"msg" : `cookie is ${req.body.postid}`});
+});
+
+apiRouter.delete('/chat', async (req, res) => {
+  res.clearCookie('chat');
+  res.status(204).end();
+});
+
+apiRouter.get('/trade', async (req, res) => {
+  const user = await findUser('token', req.cookies[authCookieName]);
+  if (user) {
+    const trade = trades.find((u)=>u["token"] === req.cookies[authCookieName]);
+    if (trade) {
+      const messages = trade["messages"].find((u)=>u["recipient"] === req.cookies['chat']);
+      if (messages) {
+        res.send(messages.array);
+      } else {
+        console.log("array not found");
+        trade["messages"].push({recipient: req.body.postid, array: []});
+        res.send([]);
+      }
+    } else {
+      console.log("trade not found");
+      trades.push({token: user.token, messages: []});
+    }
+  } else {
+    res.status(401).send({ msg: 'Unauthorized' });
+  }
+  console.log("trade/get: " + JSON.stringify(trades));
+});
+
+apiRouter.post('/trade', async (req, res) => {
+  const user = await findUser('token', req.cookies[authCookieName]);
+  if (user) {
+    const trade = trades.find((u)=>u["token"] === req.cookies[authCookieName]);
+    if (trade) {
+      const messages = trade["messages"].find((u)=>u["recipient"] === req.cookies['chat']);
+      if (messages) {
+        messages.array = req.body["messages"];
+        res.send(messages.array);
+      } else {
+        console.log("post: array not found");
+        trade["messages"].push({recipient: req.body.postid, array: []});
+        trade["messages"]["array"] = req.body["messages"];
+        res.send(trade["messages"]);
+      }
+    } else {
+      console.log("post: trade not found");
+      trades.push({token: user.token, messages: [{recipient: req.cookies['chat'], messages: req.body["messages"]}]});
+    }
+  } else {
+    res.status(401).send({ msg: 'Unauthorized' });
+  }
+  console.log("trade/post: " + JSON.stringify(trades));
 });
 
 const verifyAuth = async (req, res, next) => {
@@ -168,7 +233,7 @@ const verifyAuth = async (req, res, next) => {
     next();
   } else {
     res.status(401).send({ msg: 'Unauthorized' });
-  }
+  } 
 };
 
 app.use(function (err, req, res, next) {

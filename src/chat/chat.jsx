@@ -79,21 +79,67 @@ export function Chat() {
     //localStorage.clear();
     //let example = [{cont: "content", ti: "time:00:00", you: false }];
     //localStorage.setItem('messages'+postid, JSON.stringify(example));
-    const messageString = localStorage.getItem('messages'+postid);
+    /*const messageString = localStorage.getItem('messages'+postid);
     if (messageString) {
       console.log("messages: " + messageString);
       for(const i of JSON.parse(messageString)) {
         console.log("push it out " + JSON.stringify(i));
         messages.push(i);
       }
-    }
+    }*/
+    fetch('/api/chat', {
+      method: "post",
+      body: JSON.stringify({ "postid": postid}),
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8',
+      },
+    })
+    .then((result)=>{
+      fetch("/api/trade", {
+        method: "get",
+      })
+      .then((result)=>result.json())
+      .then((result)=> {
+        console.log(JSON.stringify(result));
+      });
+    });
 
     const interval = setInterval(() => {
       console.log("interval!");
       sendMessage({cont: "hey!", ti: "10:20 AM", you: false}, messages);
-    }, 10000);
+    }, 30000);
 
-    const gardenString = localStorage.getItem('username'+'garden');
+    fetch('/api/garden', {
+      method: 'get',
+      //body: JSON.stringify({ email: U}),
+      //headers: {
+      //  'Content-type': 'application/json; charset=UTF-8',
+      //},
+    })
+    .then((result)=>result.json())
+      .then((result)=>{
+        if (result) {
+          //result.json();
+          console.log('chat garden promise ' + JSON.stringify(result));
+          setGarden(result.garden);
+        } else {
+          setGarden([]);
+          fetch('/api/garden', {
+            method: 'post',
+            body: JSON.stringify({ email: U}),
+            headers: {
+              'Content-type': 'application/json; charset=UTF-8',
+            },
+          });
+        }
+        //if ()
+      })
+      .catch((err) => console.log(`Error: ${err}`))
+      .finally(() => {
+
+      });
+
+    /*const gardenString = localStorage.getItem('username'+'garden');
     if (gardenString) {
       optionarray.splice(0, optionarray.length);
       
@@ -101,7 +147,7 @@ export function Chat() {
       //optionarray.push(
       //);
       setGarden(JSON.parse(gardenString));
-    }
+    }*/
     
     return function cleanup() {
       clearInterval(interval);
