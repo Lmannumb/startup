@@ -27,3 +27,7 @@ These packages are pretty useful. I haven't even had to actually do anything! Lu
 ## React 2 Notes
 
 Goodness Gracious, I hate working with javascript. I was trying to fix a problem with react states for a solid 2 hour period, and when I came back after a break, the bug was gone, and I have not seen it since.
+
+## Webservice Notes
+
+Web design is definitely a work of the devil.

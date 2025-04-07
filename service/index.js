@@ -63,7 +63,7 @@ apiRouter.delete('/auth/logout', async (req, res) => {
   res.status(204).end();
 });
 
-const defaultbalance = 300;
+const defaultbalance = 4;
 let gardens = [];
 
 apiRouter.get('/garden', async (req, res) => {
@@ -108,15 +108,26 @@ apiRouter.post('/garden', async (req, res) => {
 
 let shop = [{
   item: {
-    worth: 800,
+    worth: 8,
     name: "Basic Plant",
     image: "/exampleplant.png",
     timebegan: 15
   },
-  cost: 98,
+  cost: 2,
   available: 3,
   buys: []
-}];
+},{
+  item: {
+    worth: 100,
+    name: "Basic Plant",
+    image: "/exampleplant.png",
+    timebegan: 200
+  },
+  cost: 20,
+  available: 3,
+  buys: []
+},
+];
 
 apiRouter.get('/shop', async (req, res) => {
   let t = "";
