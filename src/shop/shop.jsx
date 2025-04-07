@@ -9,17 +9,6 @@ export function Shop({userName: U}) {
   const [balance, setBalance] = React.useState(0);
 
   React.useEffect(()=>{
-    /*localStorage.setItem("shop", JSON.stringify([{
-      item: {
-        cost: 98,
-        worth: 800,
-        name: "Basic Plant",
-        image: plant,
-        timebegan: "0:00:15"
-      },
-      available: 1
-    }]));*/
-    
     const p = async ()=>{
       const response = await fetch('/api/shop', {
         method: 'get',
@@ -109,7 +98,10 @@ export function Shop({userName: U}) {
             console.log("result " + JSON.stringify(result));
             //let newg = [];
             //for (const i of result)
-            const g = JSON.parse(result.garden)
+            let g = result.garden;
+            if (typeof(g) === 'string') {
+              g = JSON.parse(g);
+            }
             g.push(item);
             console.log("g " + JSON.stringify(g));
             result.garden = g;

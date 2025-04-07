@@ -105,7 +105,7 @@ let shop = [{
     timebegan: "0:00:15"
   },
   cost: 98,
-  available: 1,
+  available: 3,
   buys: []
 }];
 

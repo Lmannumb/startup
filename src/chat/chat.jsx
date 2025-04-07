@@ -140,16 +140,17 @@ export function Chat() {
         if (result) {
           //result.json();
           console.log('chat garden promise ' + JSON.stringify(result));
-          setGarden(result.garden);
+          const g = result.garden.map((t, i)=>{t["value"] = i; return t;});
+          setGarden(g);
         } else {
           setGarden([]);
-          fetch('/api/garden', {
+          /*fetch('/api/garden', {
             method: 'post',
             body: JSON.stringify({ email: U}),
             headers: {
               'Content-type': 'application/json; charset=UTF-8',
             },
-          });
+          });*/
         }
         //if ()
       })
@@ -179,7 +180,9 @@ export function Chat() {
   const optionarray = [];
   for (const k of gardenarray) {
     var d = false;
+    //console.log("k.value " + k.value);
     for (const j of trades) {
+      //console.log("j.value " + j.value);
       if (j.value === k.value) {
         d = true;
         break;
@@ -211,9 +214,13 @@ export function Chat() {
 
         for (const j of i.offers) {
           var obj = {value: "-", name: "Could not find that plant!"};
+          console.log("j.value " + j.value + " " + typeof(j.value));
           for (const k of gardenarray) {
-            if (j.value === k.value) {
+            console.log("k.value " + typeof(k.value) + " " + k.value + " " + JSON.stringify(k));
+            if (Number(j.value) === Number(k.value)) {
               obj = k;
+              console.log("LES GOOOOO" + JSON.stringify(obj));
+              break;
             }
           }
           messagearray.push(
