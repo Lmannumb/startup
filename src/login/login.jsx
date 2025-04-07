@@ -54,7 +54,7 @@ export function Login({userName: U, changeUsername}) {
       })
       .finally(() => {
         localStorage.removeItem('userName');
-        changeUsername("");
+        changeUsername(undefined);
       });
   }
 

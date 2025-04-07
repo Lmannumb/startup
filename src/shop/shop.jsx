@@ -147,7 +147,7 @@ export function Shop({userName: U}) {
         });
         }
       }
-      const b = i.available > i.buys && i.cost < balance;
+      const b = i.available > i.buys && i.cost <= balance;
       shoparray.push(
         <div><h3 className={b ? "" : "bought"}>{i.item.name}</h3></div>
       );
@@ -167,7 +167,7 @@ export function Shop({userName: U}) {
         <div className={b ? "" : "bought"}>{"In Stock: "+(i.available-i.buys)}</div>
       );
       shoparray.push(
-        <Button variant="primary" disabled={!i.available} onClick={buy()}>Buy</Button>
+        <Button variant="primary" disabled={!b} onClick={buy()}>Buy</Button>
       );
     }
   }

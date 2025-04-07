@@ -77,8 +77,8 @@ apiRouter.get('/garden', async (req, res) => {
         Object.entries(g).filter(([key]) => key !== 'token')
       ));
     } else {
-      gardens.push({token: user.token, balance: 300, garden: JSON.stringify([])});
-      res.send({ balance: 300, garden: []});
+      gardens.push({token: user.token, balance: defaultbalance, garden: JSON.stringify([])});
+      res.send({ balance: defaultbalance, garden: []});
     }
     //res.send(gardens);
   } else {
@@ -88,17 +88,17 @@ apiRouter.get('/garden', async (req, res) => {
 });
 
 apiRouter.post('/garden', async (req, res) => {
-  console.log("garden post");
+  //console.log("garden post");
   const user = await findUser('token', req.cookies[authCookieName]);
   if (user) {
     let garden = gardens.find((u)=>u["token"] === user.token);
     if (garden) {
       for (const i of Object.keys(req.body)) {
-        console.log(i);
+        //console.log(i);
         gardens[gardens.indexOf(garden)][i] = req.body[i];
       }
     } else {
-      gardens.push({token: user.token, balance: 300, garden: JSON.stringify([])});
+      gardens.push({token: user.token, balance: defaultbalance, garden: JSON.stringify([])});
     }
   } else {
     res.status(401).send({ msg: 'Unauthorized' });
@@ -124,7 +124,7 @@ let shop = [{
     timebegan: 200
   },
   cost: 20,
-  available: 3,
+  available: 1,
   buys: []
 },
 ];

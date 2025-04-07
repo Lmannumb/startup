@@ -27,23 +27,7 @@ export function Garden({userName: U}) {
   }
 
   React.useEffect(()=>{
-    //new Time("00:00:00");
-    /*localStorage.setItem(U+"garden", JSON.stringify(
-      [{
-        value: "0",
-        name: "Basic Plant",
-        image: "exampleplant.png",
-        timebegan: "0:13:45",
-        worth: "$10"
-      },
-      {
-        value: "1",
-        name: "Basic Plant",
-        image: "exampleplant.png",
-        timebegan: "0:13:45",
-        worth: "$10"
-      }]
-    ));*/
+    console.log(JSON.stringify(document.cookie));
     const gpromise = GetGarden()
       .then((result)=>result.json())
       .then((result)=>{
@@ -131,7 +115,7 @@ export function Garden({userName: U}) {
         <div>Time remaining: {outtime}</div>
       );
       gardenarray.push(
-        <div>Worth: {i.worth}</div>
+        <div>Worth: ${i.worth}</div>
       )
       if (f) {
         const redeem = function () {

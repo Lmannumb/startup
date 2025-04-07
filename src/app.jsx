@@ -16,10 +16,17 @@ export default function App() {
   const [password, setPassword] = React.useState("");
 
   React.useEffect(()=>{
-    if (!localStorage.getItem('username')) {
-      localStorage.setItem('username','');
+    if (!localStorage.getItem('userName')) {
+      localStorage.setItem('userName','');
     }
+    setUsername(localStorage.getItem('userName'));
   },[]);
+
+  /*React.useEffect(()=>{
+    if (username === '') {
+      console.log("IT'S HAPPENING");
+    }
+  });*/
 
   return (
     <BrowserRouter>
