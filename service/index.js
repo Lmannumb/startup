@@ -175,6 +175,7 @@ apiRouter.post('/chat', async (req, res) => {
 });
 
 apiRouter.delete('/chat', async (req, res) => {
+  console.log("deleting chat cookie");
   res.clearCookie('chat');
   res.status(204).end();
 });
@@ -186,15 +187,20 @@ apiRouter.get('/trade', async (req, res) => {
     if (trade) {
       const messages = trade["messages"].find((u)=>u["recipient"] === req.cookies['chat']);
       if (messages) {
-        res.send(messages.array);
+        if (Object.keys(messages).indexOf("array") !== -1) {
+          res.send(messages.array);
+        } else {
+          messages["array"] = [];
+          res.send(messages["array"]);
+        }
       } else {
         console.log("array not found");
-        trade["messages"].push({recipient: req.body.postid, array: []});
+        trade["messages"].push({recipient: req.cookies['chat'], array: []});
         res.send([]);
       }
     } else {
       console.log("trade not found");
-      trades.push({token: user.token, messages: []});
+      trades.push({token: user.token, messages: [{recipient: req.cookies['chat'], array: []}]});
     }
   } else {
     res.status(401).send({ msg: 'Unauthorized' });
@@ -203,23 +209,25 @@ apiRouter.get('/trade', async (req, res) => {
 });
 
 apiRouter.post('/trade', async (req, res) => {
+  //console.log("trade body " + JSON.stringify(req.body));
   const user = await findUser('token', req.cookies[authCookieName]);
   if (user) {
     const trade = trades.find((u)=>u["token"] === req.cookies[authCookieName]);
     if (trade) {
       const messages = trade["messages"].find((u)=>u["recipient"] === req.cookies['chat']);
       if (messages) {
-        messages.array = req.body["messages"];
+        messages["array"] = req.body["messages"];
         res.send(messages.array);
       } else {
         console.log("post: array not found");
-        trade["messages"].push({recipient: req.body.postid, array: []});
+        trade["messages"].push({recipient: req.cookies['chat'], array: []});
         trade["messages"]["array"] = req.body["messages"];
         res.send(trade["messages"]);
       }
     } else {
       console.log("post: trade not found");
-      trades.push({token: user.token, messages: [{recipient: req.cookies['chat'], messages: req.body["messages"]}]});
+      trades.push({token: user.token, messages: [{recipient: req.cookies['chat'], array: req.body["messages"]}]});
+      res.send(trades[0]["messages"]["array"]);
     }
   } else {
     res.status(401).send({ msg: 'Unauthorized' });

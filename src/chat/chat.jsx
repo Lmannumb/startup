@@ -47,19 +47,47 @@ export function Chat() {
       //The time will be set when I set up the third party call
       you: true
     };
-    messages.push(
-      item
-    );
-    localStorage.setItem('messages'+postid, JSON.stringify(messages));
-    trades.splice(0,trades.length);
-    forceUpdate();
+    sendMessage(item, messages);
   }
 
   function sendMessage(obj, array) {
     array.push(obj);
-    console.log("sending: " + JSON.stringify(array));
+    console.log("cmon");
+    fetch('/api/trade', { method: "get"})
+    .then((result)=>result.json())
+    .then((result)=> {
+      console.log("result " + result);
+      if (result) {
+        console.log(JSON.stringify(result));
+        for (const i of messages) {
+          result.push(i)
+        }
+        console.log("post result " + JSON.stringify(result));
+        fetch('/api/trade', {
+          method: 'post',
+          body: JSON.stringify({"messages":result}),
+          headers: {
+            'Content-type': 'application/json; charset=UTF-8',
+          },
+        });
+      } else {
+        console.log("post null result " + JSON.stringify(messages));
+        fetch('/api/trade', {
+          method: 'post',
+          body: JSON.stringify({"messages":messages}),
+          headers: {
+            'Content-type': 'application/json; charset=UTF-8',
+          },
+        });
+      }
+    })
+      .catch((err) => console.log(`Error: ${err}`))
+      .finally(() => {
+        forceUpdate();
+      });
+    /*console.log("sending: " + JSON.stringify(array));
     localStorage.setItem('messages'+postid, JSON.stringify(array));
-    forceUpdate();
+    forceUpdate();*/
   }
 
   function sendEntry() {
@@ -76,17 +104,6 @@ export function Chat() {
   }
 
   React.useEffect(() => {
-    //localStorage.clear();
-    //let example = [{cont: "content", ti: "time:00:00", you: false }];
-    //localStorage.setItem('messages'+postid, JSON.stringify(example));
-    /*const messageString = localStorage.getItem('messages'+postid);
-    if (messageString) {
-      console.log("messages: " + messageString);
-      for(const i of JSON.parse(messageString)) {
-        console.log("push it out " + JSON.stringify(i));
-        messages.push(i);
-      }
-    }*/
     fetch('/api/chat', {
       method: "post",
       body: JSON.stringify({ "postid": postid}),
@@ -101,6 +118,7 @@ export function Chat() {
       .then((result)=>result.json())
       .then((result)=> {
         console.log(JSON.stringify(result));
+        updateMessages(result);
       });
     });
 
@@ -151,6 +169,9 @@ export function Chat() {
     
     return function cleanup() {
       clearInterval(interval);
+      fetch('/api/chat', {
+        method: "delete"
+      });
     }
   }, []);
 
@@ -221,12 +242,12 @@ export function Chat() {
       var onchange = function(a) {
         const index = j.valueOf();
         return () => {
-        console.log("onchange: " + index);
-        const p = document.getElementById("plantlist"+index);
-        trades[index] = {value: p.value};
-        //this.value = trades[index].value;
+          console.log("onchange: " + index);
+          const p = document.getElementById("plantlist"+index);
+          trades[index] = {value: p.value};
+          //this.value = trades[index].value;
 
-        forceUpdate();
+          forceUpdate();
         }
       };
       var def = { label: "--Select a Plant to Offer--", value: "-"};
