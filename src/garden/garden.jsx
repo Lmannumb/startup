@@ -27,7 +27,7 @@ export function Garden({userName: U}) {
   }
 
   React.useEffect(()=>{
-    new Time("00:00:00");
+    //new Time("00:00:00");
     /*localStorage.setItem(U+"garden", JSON.stringify(
       [{
         value: "0",
@@ -83,21 +83,23 @@ export function Garden({userName: U}) {
       console.log("plants: " + gardenString);
       updatePlants(JSON.parse(gardenString));
     }*/
-    let i = timeElapsed;
-    const interval = setInterval(() => {
-      setTime(++i);
-    }, 1000);
+    let interval;
+    fetch('/api/time', {method:"get"})
+    .then((result)=>result.json())
+    .then((result)=>{
+      console.log("result " + JSON.stringify(result));
+      console.log("result " + result["time"]);
+      let i = Number(result.time);
+      interval = setInterval(() => {
+        setTime(++i);
+      }, 1000);
+    })
 
 
     return function cleanup() {
       clearInterval(interval);
     }
   }, []);
-
-  function newTime(time) {
-    var t = Time.StringToTime(time);
-
-  }
 
   const gardenarray = [];
   if (plants.length) {
@@ -114,11 +116,17 @@ export function Garden({userName: U}) {
         </div>
       );
       let f = false;
-      let outtime = Time.TimeToString(Time.Arithmatic(i.timebegan, -timeElapsed));
-      if (!Time.Comparison(outtime, 0)) {
-        outtime = "0:00:00";
+      console.log(i.timebegan)
+      console.log(i.timebought);
+      console.log(timeElapsed);
+      let outtime = i.timebought+i.timebegan-timeElapsed;
+      console.log("outtime " + outtime);
+      if (outtime < 0) {
+        outtime = 0;
         f = true;
       }
+      outtime = Time.TimeToString(Time.NumToTime(outtime));
+
       gardenarray.push(
         <div>Time remaining: {outtime}</div>
       );

@@ -1,6 +1,7 @@
 import React from 'react';
 import Button from 'react-bootstrap/Button';
 import plant from '/exampleplant.png';
+import { Time } from '/src/time.jsx';
 
 export function Shop({userName: U}) {
   const [sales, setSales] = React.useState([]);
@@ -82,6 +83,13 @@ export function Shop({userName: U}) {
         const index = sales.indexOf(i);
         return function () {
           const item = sales[index].item;
+          fetch('/api/time', {method:"get"})
+          .then((result)=>result.json())
+          .then((result)=>{
+            console.log("timebought " + result);
+            console.log("timebought " + JSON.stringify(result));
+            console.log("timebought " + Number(result));
+            item["timebought"] = Number(result.time);
           fetch('/api/shop', {
               method: 'post',
               body: JSON.stringify({ "index": index, count: 1}),
@@ -136,6 +144,7 @@ export function Shop({userName: U}) {
           setSales(sales);*/
           console.log("buy " + index);
           forceUpdate();
+        });
         }
       }
       const b = i.available > i.buys && i.cost < balance;
@@ -152,7 +161,7 @@ export function Shop({userName: U}) {
         <div className={b ? "" : "bought"}>{"Plant Worth: $"+i.item.worth}</div>
       );
       shoparray.push(
-        <div className={b ? "" : "bought"}>{"Grow Time: "+i.item.timebegan}</div>
+        <div className={b ? "" : "bought"}>{"Grow Time: "+Time.TimeToString(Time.NumToTime(i.item.timebegan))}</div>
       );
       shoparray.push(
         <div className={b ? "" : "bought"}>{"In Stock: "+(i.available-i.buys)}</div>

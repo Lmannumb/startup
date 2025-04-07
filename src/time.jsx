@@ -24,6 +24,20 @@ export class Time {
     }
   }
 
+  static NumToTime(num) {
+    let n = num;
+    var item = {
+      hour: 0,
+      minute: 0,
+      second: 0
+    };
+    item.hour = (n - n % 3600) / 3600;
+    n = n - item.hour * 3600;
+    item.minute = (n - n % 60) / 60;
+    item.second = n % 60;
+    return item;
+  }
+
   static StringToTime(str) {
     var item = {
       hour: 0,

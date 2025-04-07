@@ -4,6 +4,7 @@ const bcrypt = require('bcryptjs');
 const uuid = require('uuid');
 const app = express();
 
+
 const authCookieName = 'token';
 
 app.use(express.json());
@@ -16,6 +17,15 @@ let users = [];
 
 let apiRouter = express.Router();
 app.use(`/api`, apiRouter);
+
+let timer = 0;
+const interval = setInterval(()=> {
+  timer = timer + 1;
+}, 1000);
+
+apiRouter.get('/time', async (req, res) => {
+  res.send({"time": timer});
+});
 
 apiRouter.post('/auth/create', async (req, res) => {
   //console.log(req);
@@ -100,9 +110,8 @@ let shop = [{
   item: {
     worth: 800,
     name: "Basic Plant",
-    //image: "/exampleplant.png",
-    image: "idk",
-    timebegan: "0:00:15"
+    image: "/exampleplant.png",
+    timebegan: 15
   },
   cost: 98,
   available: 3,

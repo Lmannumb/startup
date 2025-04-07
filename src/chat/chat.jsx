@@ -214,12 +214,12 @@ export function Chat() {
 
         for (const j of i.offers) {
           var obj = {value: "-", name: "Could not find that plant!"};
-          console.log("j.value " + j.value + " " + typeof(j.value));
+          //console.log("j.value " + j.value + " " + typeof(j.value));
           for (const k of gardenarray) {
-            console.log("k.value " + typeof(k.value) + " " + k.value + " " + JSON.stringify(k));
+            //console.log("k.value " + typeof(k.value) + " " + k.value + " " + JSON.stringify(k));
             if (Number(j.value) === Number(k.value)) {
               obj = k;
-              console.log("LES GOOOOO" + JSON.stringify(obj));
+              //console.log("LES GOOOOO" + JSON.stringify(obj));
               break;
             }
           }
