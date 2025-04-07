@@ -104,7 +104,7 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 
 - [x] **Node.js/Express HTTP service** - HTTP and Express are rolling.
 - [x] **Static middleware for frontend** - The middle is waring.
-- [ ] **Calls to third party endpoints** - I did not complete this part of the deliverable.
+- [x] **Calls to third party endpoints** - Meow!
 - [x] **Backend service endpoints** - The services are in the back.
 - [x] **Frontend calls service endpoints** - The front is requesting.
 

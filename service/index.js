@@ -190,12 +190,12 @@ apiRouter.post('/chat', async (req, res) => {
     httpOnly: true,
     sameSite: 'strict',
   });
-  console.log("chat cookie " + req.body.postid);
+  //console.log("chat cookie " + req.body.postid);
   res.send({"msg" : `cookie is ${req.body.postid}`});
 });
 
 apiRouter.delete('/chat', async (req, res) => {
-  console.log("deleting chat cookie");
+  //console.log("deleting chat cookie");
   res.clearCookie('chat');
   res.status(204).end();
 });
@@ -214,12 +214,12 @@ apiRouter.get('/trade', async (req, res) => {
           res.send(messages["array"]);
         }
       } else {
-        console.log("array not found");
+        //console.log("array not found");
         trade["messages"].push({recipient: req.cookies['chat'], array: []});
         res.send([]);
       }
     } else {
-      console.log("trade not found");
+      //console.log("trade not found");
       trades.push({token: user.token, messages: [{recipient: req.cookies['chat'], array: []}]});
     }
   } else {
@@ -239,13 +239,13 @@ apiRouter.post('/trade', async (req, res) => {
         messages["array"] = req.body["messages"];
         res.send(messages.array);
       } else {
-        console.log("post: array not found");
+        //console.log("post: array not found");
         trade["messages"].push({recipient: req.cookies['chat'], array: []});
         trade["messages"]["array"] = req.body["messages"];
         res.send(trade["messages"]);
       }
     } else {
-      console.log("post: trade not found");
+      //console.log("post: trade not found");
       trades.push({token: user.token, messages: [{recipient: req.cookies['chat'], array: req.body["messages"]}]});
       res.send(trades[0]["messages"]["array"]);
     }
