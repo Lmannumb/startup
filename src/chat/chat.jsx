@@ -58,14 +58,15 @@ export function Chat() {
     .then((result)=> {
       console.log("result " + result);
       if (result) {
-        console.log(JSON.stringify(result));
+        console.log(JSON.stringify(messages));
+        /*
         for (const i of messages) {
           result.push(i)
         }
-        console.log("post result " + JSON.stringify(result));
+        console.log("post result " + JSON.stringify(result));*/
         fetch('/api/trade', {
           method: 'post',
-          body: JSON.stringify({"messages":result}),
+          body: JSON.stringify({"messages":messages}),
           headers: {
             'Content-type': 'application/json; charset=UTF-8',
           },
