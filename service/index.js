@@ -251,6 +251,7 @@ apiRouter.get('/trade', async (req, res) => {
     } else {
       //console.log("trade not found");
       tradeCollection.insert({email: user.email, messages: [{recipient: req.cookies['chat'], array: []}]});
+      res.send([]);
     }
   } else {
     res.status(401).send({ msg: 'Unauthorized' });
@@ -279,8 +280,9 @@ apiRouter.post('/trade', async (req, res) => {
       }
     } else {
       //console.log("post: trade not found");
-      tradeCollection.insertOne({email: user.email, messages: [{recipient: req.cookies['chat'], array: req.body["messages"]}]});
-      res.send(trades[0]["messages"]["array"]);
+      const obj = {email: user.email, messages: [{recipient: req.cookies['chat'], array: req.body["messages"]}]};
+      tradeCollection.insertOne(obj);
+      res.send(obj);
     }
   } else {
     res.status(401).send({ msg: 'Unauthorized' });
