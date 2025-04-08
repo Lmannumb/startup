@@ -9,6 +9,9 @@ const config = require('./dbConfig.json');
 const url = `mongodb+srv://${config.userName}:${config.password}@${config.hostname}`;
 const client = new MongoClient(url);
 const db = client.db('startup');
+const userCollection = db.collection('users');
+const gardenCollection = db.collection('gardens');
+const shopCollection = db.collection('shop');
 
 (async function testConnection() {
   try {
@@ -27,7 +30,7 @@ app.use(cookieParser());
 
 app.use(express.static('public'));
 
-let users = [];
+//let users = [];
 
 let apiRouter = express.Router();
 app.use(`/api`, apiRouter);
@@ -120,7 +123,7 @@ apiRouter.post('/garden', async (req, res) => {
   console.log("garden/post: " + JSON.stringify(gardens));
 });
 
-let shop = [{
+/*shopCollection.insertMany([{
   item: {
     worth: 8,
     name: "Basic Plant",
@@ -141,31 +144,25 @@ let shop = [{
   available: 1,
   buys: []
 },
-];
+]);*/
 
 apiRouter.get('/shop', async (req, res) => {
   let t = "";
   const user = await findUser('token', req.cookies[authCookieName]);
   if (user) {
+    console.log("found user! " + req.cookies[authCookieName]);
     t = req.cookies[authCookieName];
   }
   let sendshop = [];
-  //console.log(JSON.stringify(shop));
-  for (const i of shop) {
-    /*let sendbuys = [];
-    for (const j in i.buys) {
-      sendbuyss.push({
-        userName: 
-      });
-    }*/
-   //console.log(i);
-   //console.log(JSON.stringify(i));
+  for (const i of await shopCollection.find().toArray()) {
     const buy = i["buys"].find((u)=>u["token"] === t);
     let num = 0;
     if (buy) {
       num = buy.count;
     } else {
-      i["buys"].push({token: req.cookies[authCookieName], count: 0});
+      console.log("pushing buy " + t)
+      i["buys"].push({token: t, count: 0});
+      shopCollection.updateOne({_id: i._id}, {$set: {buys: i["buys"]}})
     }
     sendshop.push({
       cost: i.cost,
@@ -179,15 +176,21 @@ apiRouter.get('/shop', async (req, res) => {
 });
 
 apiRouter.post('/shop', async (req, res) => {
+  console.log("not yet " + req.cookies[authCookieName]);
   const user = await findUser('token', req.cookies[authCookieName]);
+  console.log("flag");
   if (user) {
+    //console.log("user!" + req.cookies[authCookieName]);
+    const shop = await shopCollection.find().toArray();
     const item = shop[req.body.index];
     const buy = item["buys"].find((u)=>u["token"] === user.token);
     if (buy) {
       buy.count = buy.count + req.body.count;
+      shopCollection.updateOne({_id: item._id}, {$set: {buys: item["buys"]}});
       res.send({ msg: `Changed shop buys at ${req.body.index} to ${buy.count}` });
     } else {
       item["buys"].push({token: req.cookies[authCookieName], count: req.body.count});
+      shopCollection.updateOne({_id: item._id}, {$set: {buys: item["buys"]}});
       res.send({ msg: `Created a shop buy at ${req.body.index} with ${req.body.count}` });
     }
   } else {
@@ -294,15 +297,16 @@ async function createUser(email, password) {
     password: passwordHash,
     token: uuid.v4(),
   };
-  users.push(user);
+  await userCollection.insertOne(user);
 
   return user;
 }
 
 async function findUser(field, value) {
-  if (!value) return null;
-
-  return users.find((u) => u[field] === value);
+  let item = {};
+  item[field] = value;
+  //console.log("finduser " + JSON.stringify(item));
+  return await userCollection.findOne(item);
 }
 
 // setAuthCookie in the HTTP response
