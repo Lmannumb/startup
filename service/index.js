@@ -12,6 +12,7 @@ const db = client.db('startup');
 const userCollection = db.collection('users');
 const gardenCollection = db.collection('gardens');
 const shopCollection = db.collection('shop');
+const tradeCollection = db.collection('trades');
 
 (async function testConnection() {
   try {
@@ -63,6 +64,7 @@ apiRouter.post('/auth/login', async (req, res) => {
   if (user) {
     if (await bcrypt.compare(req.body.password, user.password)) {
       user.token = uuid.v4();
+      userCollection.updateOne({email: user.email}, {$set: {token: user.token}});
       setAuthCookie(res, user.token);
       res.send({ email: user.email });
       return;
@@ -74,7 +76,9 @@ apiRouter.post('/auth/login', async (req, res) => {
 apiRouter.delete('/auth/logout', async (req, res) => {
   const user = await findUser('token', req.cookies[authCookieName]);
   if (user) {
+    console.log("deleting");
     delete user.token;
+    userCollection.updateOne({email: user.email}, {$set: {token: undefined}});
   }
   res.clearCookie(authCookieName);
   res.status(204).end();
@@ -86,22 +90,23 @@ let gardens = [];
 apiRouter.get('/garden', async (req, res) => {
   const user = await findUser('token', req.cookies[authCookieName]);
   if (user) {
-    //console.log("user " + user.email);
-    const g = gardens.find((u)=>u["token"] === user.token);
+    
+    const g = (await gardenCollection.find().toArray()).find((u)=>u["email"] === user.email);
     if (g) {
       console.log("garden/get inner: " + JSON.stringify(g));
       res.send(Object.fromEntries(
-        Object.entries(g).filter(([key]) => key !== 'token')
+        Object.entries(g).filter(([key]) => key !== 'email')
       ));
     } else {
-      gardens.push({token: user.token, balance: defaultbalance, garden: []});
+      //gardens.push({email: user.email, balance: defaultbalance, garden: []});
+      gardenCollection.insertOne({email: user.email, balance: defaultbalance, garden: []});
       res.send({ balance: defaultbalance, garden: []});
     }
     //res.send(gardens);
   } else {
     res.status(401).send({ msg: 'Unauthorized' });
   }
-  console.log("garden/get: " + JSON.stringify(gardens));
+  //console.log("garden/get: " + JSON.stringify(gardens));
 });
 
 apiRouter.post('/garden', async (req, res) => {
@@ -120,7 +125,7 @@ apiRouter.post('/garden', async (req, res) => {
   } else {
     res.status(401).send({ msg: 'Unauthorized' });
   }
-  console.log("garden/post: " + JSON.stringify(gardens));
+  //console.log("garden/post: " + JSON.stringify(gardens));
 });
 
 /*shopCollection.insertMany([{
@@ -151,17 +156,17 @@ apiRouter.get('/shop', async (req, res) => {
   const user = await findUser('token', req.cookies[authCookieName]);
   if (user) {
     console.log("found user! " + req.cookies[authCookieName]);
-    t = req.cookies[authCookieName];
+    t = user.email;
   }
   let sendshop = [];
   for (const i of await shopCollection.find().toArray()) {
-    const buy = i["buys"].find((u)=>u["token"] === t);
+    const buy = i["buys"].find((u)=>u["email"] === t);
     let num = 0;
     if (buy) {
       num = buy.count;
     } else {
       console.log("pushing buy " + t)
-      i["buys"].push({token: t, count: 0});
+      i["buys"].push({email: t, count: 0});
       shopCollection.updateOne({_id: i._id}, {$set: {buys: i["buys"]}})
     }
     sendshop.push({
@@ -178,25 +183,23 @@ apiRouter.get('/shop', async (req, res) => {
 apiRouter.post('/shop', async (req, res) => {
   console.log("not yet " + req.cookies[authCookieName]);
   const user = await findUser('token', req.cookies[authCookieName]);
-  console.log("flag");
   if (user) {
     //console.log("user!" + req.cookies[authCookieName]);
     const shop = await shopCollection.find().toArray();
     const item = shop[req.body.index];
-    const buy = item["buys"].find((u)=>u["token"] === user.token);
+    const buy = item["buys"].find((u)=>u["email"] === user.email);
     if (buy) {
       buy.count = buy.count + req.body.count;
       shopCollection.updateOne({_id: item._id}, {$set: {buys: item["buys"]}});
-      res.send({ msg: `Changed shop buys at ${req.body.index} to ${buy.count}` });
+      res.send({ msg: `Changed shop buys at ${req.body.index} to ${buy.count}`});
     } else {
-      item["buys"].push({token: req.cookies[authCookieName], count: req.body.count});
+      item["buys"].push({email: user.email, count: req.body.count});
       shopCollection.updateOne({_id: item._id}, {$set: {buys: item["buys"]}});
       res.send({ msg: `Created a shop buy at ${req.body.index} with ${req.body.count}` });
     }
   } else {
     res.status(401).send({ msg: 'Unauthorized' });
   }
-  console.log("shop/post: " + JSON.stringify(shop));
 });
 
 trades = [];
@@ -305,8 +308,12 @@ async function createUser(email, password) {
 async function findUser(field, value) {
   let item = {};
   item[field] = value;
-  //console.log("finduser " + JSON.stringify(item));
-  return await userCollection.findOne(item);
+  console.log("finduser " + JSON.stringify(item));
+  let a = await userCollection.findOne(item);
+  if(a) {
+    console.log("true!");
+  }
+  return a;
 }
 
 // setAuthCookie in the HTTP response
