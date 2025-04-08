@@ -234,19 +234,23 @@ apiRouter.get('/trade', async (req, res) => {
       const messages = trade["messages"].find((u)=>u["recipient"] === req.cookies['chat']);
       if (messages) {
         if (Object.keys(messages).indexOf("array") !== -1) {
-          res.send(messages.array);
-        } else {
+          res.send(messages.array ? messages.array : []);
+        } 
+        /*else {
           messages["array"] = [];
           res.send(messages["array"]);
-        }
+        }*/
       } else {
         //console.log("array not found");
         trade["messages"].push({recipient: req.cookies['chat'], array: []});
+        tradeCollection.updateOne({email: user.email}, {$set: {
+          messages: trade["messages"]
+        }});
         res.send([]);
       }
     } else {
       //console.log("trade not found");
-      trades.push({token: user.token, messages: [{recipient: req.cookies['chat'], array: []}]});
+      tradeCollection.insert({email: user.email, messages: [{recipient: req.cookies['chat'], array: []}]});
     }
   } else {
     res.status(401).send({ msg: 'Unauthorized' });
