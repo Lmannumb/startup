@@ -226,7 +226,7 @@ apiRouter.delete('/chat', async (req, res) => {
 });
 
 apiRouter.get('/trade', async (req, res) => {
-  const trades = await tradeCollection.find().toArray();
+  let trades = await tradeCollection.find().toArray();
   const user = await findUser('token', req.cookies[authCookieName]);
   if (user) {
     const trade = trades.find((u)=>u["token"] === req.cookies[authCookieName]);
@@ -260,6 +260,7 @@ apiRouter.get('/trade', async (req, res) => {
 
 apiRouter.post('/trade', async (req, res) => {
   //console.log("trade body " + JSON.stringify(req.body));
+  let trades = await tradeCollection.find().toArray();
   const user = await findUser('token', req.cookies[authCookieName]);
   if (user) {
     const trade = trades.find((u)=>u["token"] === req.cookies[authCookieName]);
@@ -267,16 +268,18 @@ apiRouter.post('/trade', async (req, res) => {
       const messages = trade["messages"].find((u)=>u["recipient"] === req.cookies['chat']);
       if (messages) {
         messages["array"] = req.body["messages"];
+        tradeCollection.updateOne({email: user.email}, {$set: {messages: messages}});
         res.send(messages.array);
       } else {
         //console.log("post: array not found");
         trade["messages"].push({recipient: req.cookies['chat'], array: []});
         trade["messages"]["array"] = req.body["messages"];
+        tradeCollection.updateOne({email: user.email}, {$set: {messages: trade["messages"]}});
         res.send(trade["messages"]);
       }
     } else {
       //console.log("post: trade not found");
-      trades.push({token: user.token, messages: [{recipient: req.cookies['chat'], array: req.body["messages"]}]});
+      tradeCollection.insertOne({token: user.token, messages: [{recipient: req.cookies['chat'], array: req.body["messages"]}]});
       res.send(trades[0]["messages"]["array"]);
     }
   } else {
