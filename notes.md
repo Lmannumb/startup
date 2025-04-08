@@ -31,3 +31,7 @@ Goodness Gracious, I hate working with javascript. I was trying to fix a problem
 ## Webservice Notes
 
 Web design is definitely a work of the devil. Meow!
+
+## DB Notes
+
+As expected, this one is going pretty easy. I only really need to change a few lines of code for each function, so that the arrays come from the database rather than local variables.
