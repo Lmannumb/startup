@@ -279,7 +279,7 @@ apiRouter.post('/trade', async (req, res) => {
       }
     } else {
       //console.log("post: trade not found");
-      tradeCollection.insertOne({token: user.token, messages: [{recipient: req.cookies['chat'], array: req.body["messages"]}]});
+      tradeCollection.insertOne({email: user.email, messages: [{recipient: req.cookies['chat'], array: req.body["messages"]}]});
       res.send(trades[0]["messages"]["array"]);
     }
   } else {
