@@ -111,16 +111,23 @@ apiRouter.get('/garden', async (req, res) => {
 
 apiRouter.post('/garden', async (req, res) => {
   //console.log("garden post");
+  let gardens = await gardenCollection.find().toArray();
   const user = await findUser('token', req.cookies[authCookieName]);
   if (user) {
-    let garden = gardens.find((u)=>u["token"] === user.token);
+    let garden = gardens.find((u)=>u["email"] === user.email);
     if (garden) {
-      for (const i of Object.keys(req.body)) {
+      for (const i of Object.keys(Object.fromEntries(
+        Object.entries(req.body).filter(([key]) => key !== '_id')
+      ))) {
         //console.log(i);
-        gardens[gardens.indexOf(garden)][i] = req.body[i];
+        //gardens[gardens.indexOf(garden)][i] = req.body[i];
+        let item = {};
+        item[i] = req.body[i];
+        gardenCollection.updateOne({email: user.email}, {$set : item});
       }
     } else {
-      gardens.push({token: user.token, balance: defaultbalance, garden: []});
+      gardenCollection.insertOne({email: user.email, balance: defaultbalance, garden: []});
+      //gardens.push({token: user.token, balance: defaultbalance, garden: []});
     }
   } else {
     res.status(401).send({ msg: 'Unauthorized' });
@@ -181,7 +188,7 @@ apiRouter.get('/shop', async (req, res) => {
 });
 
 apiRouter.post('/shop', async (req, res) => {
-  console.log("not yet " + req.cookies[authCookieName]);
+  //console.log("not yet " + req.cookies[authCookieName]);
   const user = await findUser('token', req.cookies[authCookieName]);
   if (user) {
     //console.log("user!" + req.cookies[authCookieName]);
