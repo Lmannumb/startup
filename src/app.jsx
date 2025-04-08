@@ -19,6 +19,10 @@ export default function App() {
     if (!localStorage.getItem('userName')) {
       localStorage.setItem('userName','');
     }
+    console.log("cookies! " + JSON.stringify(Object.keys(document.cookie)));
+    if (Object.keys(document.cookie).indexOf('token') === -1) {
+      localStorage.setItem('userName','');
+    }
     setUsername(localStorage.getItem('userName'));
   },[]);
 

@@ -57,6 +57,8 @@ export function Login({userName: U, changeUsername}) {
         changeUsername(undefined);
         localStorage.removeItem('userName');
       });
+    changeUsername(undefined);
+    localStorage.removeItem('userName');
   }
 
   async function loginOrCreate(endpoint) {
@@ -72,13 +74,13 @@ export function Login({userName: U, changeUsername}) {
       changeUsername(userName);
     } else {
       const body = await response.json();
-      setDisplayError(`⚠ Error: ${body.msg}`);
+      //setDisplayError(`⚠ Error: ${body.msg}`);
     }
   }
 
   return (
     <main className="container-fluid bg-secondary text-center">
-      {U === "" ?
+      {U === "" | U === undefined ?
         (<div><h2>Login or Register to Idle Garden</h2>
         
           <div className="input-group mb-3">
