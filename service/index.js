@@ -209,7 +209,7 @@ apiRouter.post('/shop', async (req, res) => {
   }
 });
 
-trades = [];
+//trades = [];
 
 apiRouter.post('/chat', async (req, res) => {
   res.cookie('chat', req.body.postid, {
@@ -217,17 +217,16 @@ apiRouter.post('/chat', async (req, res) => {
     httpOnly: true,
     sameSite: 'strict',
   });
-  //console.log("chat cookie " + req.body.postid);
   res.send({"msg" : `cookie is ${req.body.postid}`});
 });
 
 apiRouter.delete('/chat', async (req, res) => {
-  //console.log("deleting chat cookie");
   res.clearCookie('chat');
   res.status(204).end();
 });
 
 apiRouter.get('/trade', async (req, res) => {
+  const trades = await tradeCollection.find().toArray();
   const user = await findUser('token', req.cookies[authCookieName]);
   if (user) {
     const trade = trades.find((u)=>u["token"] === req.cookies[authCookieName]);
