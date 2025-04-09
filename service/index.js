@@ -214,7 +214,7 @@ apiRouter.post('/shop', async (req, res) => {
 apiRouter.post('/chat', async (req, res) => {
   res.cookie('chat', req.body.postid, {
     secure: true,
-    httpOnly: true,
+    httpOnly: false,
     sameSite: 'strict',
   });
   res.send({"msg" : `cookie is ${req.body.postid}`});
@@ -229,7 +229,7 @@ apiRouter.get('/trade', async (req, res) => {
   let trades = await tradeCollection.find().toArray();
   const user = await findUser('token', req.cookies[authCookieName]);
   if (user) {
-    const trade = trades.find((u)=>u["token"] === req.cookies[authCookieName]);
+    const trade = trades.find((u)=>u["email"] === user.email);
     if (trade) {
       const messages = trade["messages"].find((u)=>u["recipient"] === req.cookies['chat']);
       if (messages) {
@@ -250,7 +250,7 @@ apiRouter.get('/trade', async (req, res) => {
       }
     } else {
       //console.log("trade not found");
-      tradeCollection.insert({email: user.email, messages: [{recipient: req.cookies['chat'], array: []}]});
+      tradeCollection.insertOne({email: user.email, messages: [{recipient: req.cookies['chat'], array: []}]});
       res.send([]);
     }
   } else {
@@ -264,7 +264,7 @@ apiRouter.post('/trade', async (req, res) => {
   let trades = await tradeCollection.find().toArray();
   const user = await findUser('token', req.cookies[authCookieName]);
   if (user) {
-    const trade = trades.find((u)=>u["token"] === req.cookies[authCookieName]);
+    const trade = trades.find((u)=>u["email"] === user.email);
     if (trade) {
       const messages = trade["messages"].find((u)=>u["recipient"] === req.cookies['chat']);
       if (messages) {

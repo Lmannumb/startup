@@ -203,9 +203,9 @@ export function Chat() {
         messagearray.push(
           <div className={i.you ? "you" : ""}>{i.cont}</div>
         );
-        messagearray.push(
+        /*messagearray.push(
           <div className={"time " + (i.you ? "you" : "")}>{i.ti}</div>
-        );
+        );*/
       }
       else {
         messagearray.push(
@@ -227,9 +227,10 @@ export function Chat() {
             <div className={i.you ? "you" : ""}>{obj.name}</div>
           );
         }
+        /*
         messagearray.push(
           <div className={"time " + (i.you ? "you" : "")}>{i.ti}</div>
-        );
+        );*/
       }
     }
   }
