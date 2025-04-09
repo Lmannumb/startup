@@ -6,6 +6,7 @@ import { WebHandler } from '/src/WebHandler.js';
 export function Trading() {
   const [goto, setGoto] = React.useState("");
   const [history, setHistory] = React.useState([]);
+  const [online, setOnline] = React.useState([]);
   //const [, forceUpdate] = React.useReducer(x => x + 1, 0);
 
   React.useEffect(()=>{

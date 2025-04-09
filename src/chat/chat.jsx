@@ -2,19 +2,21 @@ import React from 'react';
 import Button from 'react-bootstrap/Button';
 import { useParams } from 'react-router-dom';
 
-export function Chat() {
+export function Chat({ websocket}) {
   const { id: postid } = useParams();
 
   const [messages, updateMessages] = React.useState([]);
-  const messageRef = React.useRef(messages);
   const [trades, setTrades] = React.useState([]);
   const [message, formUpdate] = React.useState("");
   const [gardenarray, setGarden] = React.useState([]);
   const [, forceUpdate] = React.useReducer(x => x + 1, 0);
 
+  Reach.useEffect(()=>{
+    
+  }, [websocket]);
+
   function UpdateMessages(value) {
     updateMessages(value);
-    messageRef.current = messages;
   }
 
   function UpdateForm(value) {

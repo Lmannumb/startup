@@ -9,6 +9,7 @@ import { Trading } from './trading/trading';
 import { Home } from './home/home';
 import { Notification } from './notification/notification';
 import { Chat } from './chat/chat';
+import { WebHandler} from "./webhandler.js";
 //import { Signedin } from './signedin/signedin';
 
 export default function App() {
@@ -42,7 +43,7 @@ export default function App() {
         <a className="navbar-brand" href="#">Idle Garden</a>
         <menu className="navbar-nav">
           <li className="nav-item"><NavLink className='nav-link' to=''>Home</NavLink></li>
-          <li className="nav-item"><NavLink className='nav-link' to={username === '' ? 'login' : 'trading'}>Trading</NavLink></li>
+          <li className="nav-item"><NavLink className='nav-link' to={username === '' ? 'login' : 'trading'}>Chatting</NavLink></li>
           <li className="nav-item"><NavLink className='nav-link' to={username === '' ? 'login' : 'shop'}>Shop</NavLink></li>
           <li className="nav-item"><NavLink className='nav-link' to={username === '' ? 'login' : 'garden'}>Garden</NavLink></li>
           <li className="nav-item"><NavLink className='nav-link' to='login'>Login</NavLink></li>
@@ -52,7 +53,7 @@ export default function App() {
 
 <Routes>
   <Route path='/' element={<Home />} exact />
-  <Route path='/trading' element={<Trading />} />
+  <Route path='/trading' element={<Trading name={username}/>} />
   <Route path='/trading/:id' element={<Chat />} exact />
   <Route path='/shop' element={<Shop userName={username}/>} exact />
   <Route path='/garden' element={<Garden userName={username}/>} exact />
