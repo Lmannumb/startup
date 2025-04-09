@@ -6,10 +6,16 @@ export function Chat() {
   const { id: postid } = useParams();
 
   const [messages, updateMessages] = React.useState([]);
+  const messageRef = React.useRef(messages);
   const [trades, setTrades] = React.useState([]);
   const [message, formUpdate] = React.useState("");
   const [gardenarray, setGarden] = React.useState([]);
   const [, forceUpdate] = React.useReducer(x => x + 1, 0)
+
+  function UpdateMessages(value) {
+    updateMessages(value);
+    messageRef.current = messages;
+  }
 
   function UpdateForm(value) {
     console.log(value);
@@ -44,21 +50,28 @@ export function Chat() {
       offers: offer,
       expired: false,
       ti: "10:20 AM",
-      //The time will be set when I set up the third party call
       you: true
     };
-    sendMessage(item, messages);
+    sendMessage(item
+      //, messageRef, UpdateMessages
+      );
   }
 
-  function sendMessage(obj, array) {
-    array.push(obj);
-    console.log("cmon");
+  function sendMessage(obj) {
+    console.log("cmo " + JSON.stringify(messages));
+    messages.push(obj);
+    UpdateMessages(messages)
+    console.log("cmon " + JSON.stringify(messages));
     fetch('/api/trade', { method: "get"})
-    .then((result)=>result.json())
+    .then((result)=>{
+      console.log(result);
+      return result.json();}
+    )
     .then((result)=> {
       console.log("result " + result);
+      console.log("result " + JSON.stringify(result));
       if (result) {
-        console.log(JSON.stringify(messages));
+        //console.log(JSON.stringify(messages));
         /*
         for (const i of messages) {
           result.push(i)
@@ -99,12 +112,15 @@ export function Chat() {
       //The time will be set when I set up the third party call
       you: true
     };
-    sendMessage(obj, messages);
+    sendMessage(obj
+      //, messageRef, UpdateMessages
+      );
     //setMessages(messages);
     formUpdate("");
   }
 
   React.useEffect(() => {
+    let interval = undefined;
     fetch('/api/chat', {
       method: "post",
       body: JSON.stringify({ "postid": postid}),
@@ -119,21 +135,20 @@ export function Chat() {
       .then((result)=>result.json())
       .then((result)=> {
         console.log(JSON.stringify(result));
-        updateMessages(result);
+        const p = async () => UpdateMessages(result);
+        p();
       });
     });
 
-    const interval = setInterval(() => {
+    interval = setInterval(function () {
       console.log("interval!");
-      sendMessage({cont: "hey!", ti: "10:20 AM", you: false}, messages);
-    }, 30000);
+      sendMessage({cont: "hey!", ti: "10:20 AM", you: false}
+        //, messageRef, UpdateMessages
+      );
+    }, 5000);
 
     fetch('/api/garden', {
       method: 'get',
-      //body: JSON.stringify({ email: U}),
-      //headers: {
-      //  'Content-type': 'application/json; charset=UTF-8',
-      //},
     })
     .then((result)=>result.json())
       .then((result)=>{
@@ -144,13 +159,6 @@ export function Chat() {
           setGarden(g);
         } else {
           setGarden([]);
-          /*fetch('/api/garden', {
-            method: 'post',
-            body: JSON.stringify({ email: U}),
-            headers: {
-              'Content-type': 'application/json; charset=UTF-8',
-            },
-          });*/
         }
         //if ()
       })
@@ -158,16 +166,6 @@ export function Chat() {
       .finally(() => {
 
       });
-
-    /*const gardenString = localStorage.getItem('username'+'garden');
-    if (gardenString) {
-      optionarray.splice(0, optionarray.length);
-      
-      //console.log("options: " + gardenString);  selected={i.value === "-"} selected={k.value === i.value}
-      //optionarray.push(
-      //);
-      setGarden(JSON.parse(gardenString));
-    }*/
     
     return function cleanup() {
       clearInterval(interval);
@@ -196,10 +194,10 @@ export function Chat() {
   }
   const messagearray = [];
   if (messages.length) {
-    console.log("messages? " + JSON.stringify(messages));
+    //console.log("messages? " + JSON.stringify(messages));
     for (const i of messages) {
       if (!("offers" in i)) {
-        console.log("pushing message: " + JSON.stringify(i));
+        //console.log("pushing message: " + JSON.stringify(i));
         messagearray.push(
           <div className={i.you ? "you" : ""}>{i.cont}</div>
         );

@@ -269,7 +269,7 @@ apiRouter.post('/trade', async (req, res) => {
       const messages = trade["messages"].find((u)=>u["recipient"] === req.cookies['chat']);
       if (messages) {
         messages["array"] = req.body["messages"];
-        tradeCollection.updateOne({email: user.email}, {$set: {messages: messages}});
+        tradeCollection.updateOne({email: user.email}, {$set: {messages: trade["messages"]}});
         res.send(messages.array);
       } else {
         //console.log("post: array not found");
