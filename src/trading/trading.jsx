@@ -3,11 +3,19 @@ import Button from 'react-bootstrap/Button';
 import { Link } from 'react-router-dom';
 import { WebHandler } from '/src/WebHandler.js';
 
-export function Trading() {
-  const [goto, setGoto] = React.useState("");
+export function Trading({userName}) {
+  const [message, setMessage] = React.useState("");
   const [history, setHistory] = React.useState([]);
   const [online, setOnline] = React.useState([]);
   //const [, forceUpdate] = React.useReducer(x => x + 1, 0);
+
+  const websocket = new WebHandler();
+
+  React.useEffect(() => {
+    websocket.addObserver((chat) => {
+      setHistory((prevMessages) => [...prevMessages, chat]);
+    });
+  }, [websocket]);
 
   React.useEffect(()=>{
     fetch('/api/trades', {method:"get"})
@@ -22,14 +30,14 @@ export function Trading() {
   function sendCookie() {
     fetch('/api/chat', {
       method: "post",
-      body: JSON.stringify({"postid": goto}),
+      body: JSON.stringify({"postid": message}),
       headers: {
         'Content-type': 'application/json; charset=UTF-8',
       },
     })
   }
   
-  //console.log(goto);
+  //console.log(message);
 
   const historyarray = [];
   for (const i of history) {
@@ -41,15 +49,15 @@ export function Trading() {
 
   return (
     <main className="container-fluid bg-secondary text-center">
-        <div><h1>Trade History</h1></div>
-        {historyarray}
         <div><h1>Online</h1></div>
-        <div><h1>Direct Connect</h1></div>
+        <div><h1>Messages</h1></div>
+        {historyarray}
+        <div><h1>Message</h1></div>
           <div className="input-group mb-3">
-            <input className="form-control" type="text" placeholder="username" onChange={(e) => setGoto(e.target.value)}/>
+            <input className="form-control" type="text" placeholder="username" onChange={(e) => setMessage(e.target.value)}/>
           </div>
-          <Link to={"/trading/" + goto}><Button variant="primary"
-            disabled={goto === ""}>Send</Button></Link>
+          <Button variant="primary"
+            disabled={message === ""} onClick={()=>{websocket.sendMessage(userName, message)}}>Send</Button>
             
       </main>
   );
