@@ -8,6 +8,31 @@ export function Trading({userName, websocket}) {
   const [history, setHistory] = React.useState([]);
   const [online, setOnline] = React.useState([]);
 
+  React.useEffect(()=>{
+    
+    fetch('/api/clients', {
+      method:"post",
+      body: JSON.stringify({name:userName}),
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8',
+      },
+    });
+    
+    fetch('/api/chat', {
+      method: "post",
+      body: JSON.stringify({postid:userName}),
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8',
+      },
+    });
+
+    return function cleanup() {
+      fetch('/api/clients', {
+        method:"delete",
+        credentials: 'same-origin',});
+    }
+  }, [websocket]);
+
   React.useEffect(() => {
     websocket.addObserver((chat) => {
       setHistory((prevMessages) => [...prevMessages, chat]);
@@ -17,7 +42,7 @@ export function Trading({userName, websocket}) {
     .then((result)=>result.json())
     .then((result)=>{
       console.log("onliners: " + JSON.stringify(result));
-      setOnline(result)
+      setOnline(result);
     })
   }, [websocket]);
 
@@ -40,14 +65,12 @@ export function Trading({userName, websocket}) {
     console.log(online.length)
     console.log("balls on my face " + i);
     observerarray.push(
-      <div>{i.name}::</div>
+      <div>{i}</div>
     );
   }
 
   return (
     <main className="container-fluid bg-secondary text-center">
-        <div><h1>Online</h1></div>
-        {observerarray}
         <div><h1>Messages</h1></div>
         {historyarray}
         <div><h1>Message</h1></div>
@@ -62,6 +85,9 @@ export function Trading({userName, websocket}) {
 }
 
 /* 
+
+        <div><h1>Online</h1></div>
+        {observerarray}
 <Link to={i.recipient}>{i.recipient}</Link>
         <div><Link to="BlueCat11">BlueCat11</Link></div>
         <div><Link to="MoeLester">MoeLester</Link></div>

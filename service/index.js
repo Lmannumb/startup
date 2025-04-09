@@ -213,7 +213,7 @@ apiRouter.post('/shop', async (req, res) => {
 //trades = [];
 
 apiRouter.post('/chat', async (req, res) => {
-  res.cookie('chat', req.body.postid, {
+  res.cookie('client', req.body.postid, {
     secure: true,
     httpOnly: false,
     sameSite: 'strict',
@@ -391,13 +391,13 @@ socketServer.on('connection', (socket) => {
   let clients = [];
 
   apiRouter.post('/clients', async (req, res) => {
-    clients.push(req.body.name);
-    res.cookie('chat', req.body.name, {
-      secure: true,
+    res.cookie('client', req.body.name, {
+      secure: false,
       httpOnly: false,
       sameSite: 'strict',
     });
-    console.log("clients/get " + JSON.stringify(clients) + " " + req.body.name);
+    clients.push(req.body.name);
+    console.log("clients/post " + JSON.stringify(clients) + " " + JSON.stringify(req.body));
   });
 
   apiRouter.get('/clients', async (req, res) => {
@@ -406,9 +406,10 @@ socketServer.on('connection', (socket) => {
   });
 
   apiRouter.delete('/clients', async (req, res) => {
-    if (clients.indexOf(req.cookie['chat']) !== -1) {
-      clients.splice(clients.indexOf(req.cookie['chat'], 1));
-      res.clearCookie('chat');
+    console.log(JSON.stringify(req.cookies));
+    if (clients.indexOf(req.cookies['client']) !== -1) {
+      clients.splice(clients.indexOf(req.cookies['client'], 1));
+      res.clearCookie('client');
       res.status(204).end();
       console.log("yes");
     }
@@ -416,5 +417,5 @@ socketServer.on('connection', (socket) => {
       res.status(502).end();
       console.log("bruh");
     }
-    console.log("clients/delete " + JSON.stringify(clients));
+    console.log("clients/delete " + JSON.stringify(clients) + " " + req.cookies['client']);
   });

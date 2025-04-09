@@ -2,7 +2,6 @@
 
 class WebHandler {
     observers = [];
-    name = "E";
     connected = false;
   
     constructor() {
@@ -11,19 +10,10 @@ class WebHandler {
       this.socket = new WebSocket(`${protocol}://${window.location.hostname}:${port}/ws`);
       this.socket.onopen = (event) => {
         this.notifyObservers('system', 'websocket', 'connected');
-        fetch('/api/clients', {
-            method:"post",
-            body: JSON.stringify({"name":this.name}),
-            headers: {
-              'Content-type': 'application/json; charset=UTF-8',
-            },
-        })
         this.connected = true;
       };
       this.socket.onclose = (event) => {
         this.notifyObservers('system', 'websocket', 'disconnected');
-        fetch('/api/clients', {method:"delete"});
-        this.name = "E";
         this.connected = false;
       };
       this.socket.onmessage = async (msg) => {

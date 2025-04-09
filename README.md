@@ -112,18 +112,18 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
-- [ ] **User registration** - I did not complete this part of the deliverable.
-- [ ] **User login and logout** - I did not complete this part of the deliverable.
-- [ ] **Stores data in MongoDB** - I did not complete this part of the deliverable.
-- [ ] **Stores credentials in MongoDB** - I did not complete this part of the deliverable.
-- [ ] **Restricts functionality based on authentication** - I did not complete this part of the deliverable.
+- [x] **User registration** - Users registered.
+- [x] **User login and logout** - They can login and logout too!
+- [x] **Stores data in MongoDB** - The data is stored in there.
+- [x] **Stores credentials in MongoDB** - Credentials stored.
+- [x] **Restricts functionality based on authentication** - Here we go.
 
 ## 🚀 WebSocket deliverable
 
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
-- [ ] **Backend listens for WebSocket connection** - I did not complete this part of the deliverable.
-- [ ] **Frontend makes WebSocket connection** - I did not complete this part of the deliverable.
-- [ ] **Data sent over WebSocket connection** - I did not complete this part of the deliverable.
-- [ ] **WebSocket data displayed** - I did not complete this part of the deliverable.
-- [ ] **Application is fully functional** - I did not complete this part of the deliverable.
+- [x] **Backend listens for WebSocket connection** - It hears.
+- [x] **Frontend makes WebSocket connection** - It speaks.
+- [x] **Data sent over WebSocket connection** - They commune.
+- [x] **WebSocket data displayed** - The show.
+- [x] **Application is fully functional** - What is done, is done.
