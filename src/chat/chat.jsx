@@ -58,10 +58,10 @@ export function Chat() {
   }
 
   function sendMessage(obj) {
-    console.log("cmo " + JSON.stringify(messages));
+    //console.log("cmo " + JSON.stringify(messages));
     messages.push(obj);
     UpdateMessages(messages)
-    console.log("cmon " + JSON.stringify(messages));
+    //console.log("cmon " + JSON.stringify(messages));
     fetch('/api/trade', { method: "get"})
     .then((result)=>{
       console.log(result);
@@ -145,7 +145,7 @@ export function Chat() {
       sendMessage({cont: "hey!", ti: "10:20 AM", you: false}
         //, messageRef, UpdateMessages
       );
-    }, 5000);
+    }, 30000);
 
     fetch('/api/garden', {
       method: 'get',
