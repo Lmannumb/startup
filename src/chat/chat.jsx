@@ -10,7 +10,7 @@ export function Chat() {
   const [trades, setTrades] = React.useState([]);
   const [message, formUpdate] = React.useState("");
   const [gardenarray, setGarden] = React.useState([]);
-  const [, forceUpdate] = React.useReducer(x => x + 1, 0)
+  const [, forceUpdate] = React.useReducer(x => x + 1, 0);
 
   function UpdateMessages(value) {
     updateMessages(value);

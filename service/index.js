@@ -225,6 +225,16 @@ apiRouter.delete('/chat', async (req, res) => {
   res.status(204).end();
 });
 
+apiRouter.get('/trades', async (req, res)=>{
+  const user = await findUser('token', req.cookies[authCookieName]);
+  if (user) {
+    res.send(await tradeCollection.findOne({email: user.email}));
+    console.log(await tradeCollection.findOne({email: user.email}));
+  } else {
+    res.status(401).send({ msg: 'Unauthorized' });
+  }
+});
+
 apiRouter.get('/trade', async (req, res) => {
   let trades = await tradeCollection.find().toArray();
   const user = await findUser('token', req.cookies[authCookieName]);
