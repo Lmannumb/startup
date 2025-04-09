@@ -34,4 +34,8 @@ Web design is definitely a work of the devil. Meow!
 
 ## DB Notes
 
-As expected, this one is going pretty easy. I only really need to change a few lines of code for each function, so that the arrays come from the database rather than local variables.
+As expected, this one is going pretty easy. I only really need to change a few lines of code for each function, so that the arrays come from the database rather than local variables. Please give me a grade :(
+
+## WebSocket Notes
+
+Worst one by far lol. Anyways the sockets are webbing as they should
