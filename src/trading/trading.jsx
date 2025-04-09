@@ -1,6 +1,7 @@
 import React from 'react';
 import Button from 'react-bootstrap/Button';
 import { Link } from 'react-router-dom';
+import { WebHandler } from '/src/WebHandler.js';
 
 export function Trading() {
   const [goto, setGoto] = React.useState("");
@@ -31,19 +32,17 @@ export function Trading() {
 
   const historyarray = [];
   for (const i of history) {
-    console.log("i " + i)
-    console.log("i " + JSON.stringify(i))
-    console.log("i " + i.recipient)
-    historyarray.push(<div><Link to={i.recipient}>{i.recipient}</Link></div>);
+    historyarray.push((
+      <div><Link to={i.recipient}>{i.recipient}</Link></div>
+    ));
   }
   
 
   return (
     <main className="container-fluid bg-secondary text-center">
         <div><h1>Trade History</h1></div>
-        {history}
+        {historyarray}
         <div><h1>Online</h1></div>
-        <div><Link to="BlueCat11">BlueCat11</Link></div>
         <div><h1>Direct Connect</h1></div>
           <div className="input-group mb-3">
             <input className="form-control" type="text" placeholder="username" onChange={(e) => setGoto(e.target.value)}/>
@@ -56,6 +55,7 @@ export function Trading() {
 }
 
 /* 
+        <div><Link to="BlueCat11">BlueCat11</Link></div>
         <div><Link to="MoeLester">MoeLester</Link></div>
         <div><Link to="barrykikokineer">barrymikokinner</Link></div>
         <div><Link to="darkman42069">darkman42069</Link></div>*/
