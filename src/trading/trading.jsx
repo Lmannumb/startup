@@ -17,7 +17,7 @@ export function Trading({userName}) {
     });
   }, [websocket]);
 
-  React.useEffect(()=>{
+  /*React.useEffect(()=>{
     fetch('/api/trades', {method:"get"})
     .then((result)=>result.json())
     .then((result)=>{
@@ -25,7 +25,7 @@ export function Trading({userName}) {
       console.log("trades result: " + JSON.stringify(result));
       setHistory(result.messages);
     })
-  }, []);
+  }, []);*/
 
   function sendCookie() {
     fetch('/api/chat', {
@@ -42,7 +42,7 @@ export function Trading({userName}) {
   const historyarray = [];
   for (const i of history) {
     historyarray.push((
-      <div><Link to={i.recipient}>{i.recipient}</Link></div>
+      <div>{i.msg}</div>
     ));
   }
   
@@ -64,6 +64,7 @@ export function Trading({userName}) {
 }
 
 /* 
+<Link to={i.recipient}>{i.recipient}</Link>
         <div><Link to="BlueCat11">BlueCat11</Link></div>
         <div><Link to="MoeLester">MoeLester</Link></div>
         <div><Link to="barrykikokineer">barrymikokinner</Link></div>

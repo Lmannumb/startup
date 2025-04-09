@@ -17,7 +17,7 @@ class WebHandler {
         this.connected = false;
       };
       this.socket.onmessage = async (msg) => {
-        const text = await event.data.text();
+        const text = await msg.data.text();
         const chat = JSON.parse(text);
         this.notifyObservers('received', chat.name, chat.msg);
       };
