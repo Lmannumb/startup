@@ -23,6 +23,8 @@ class WebHandler {
       };
     }
     sendMessage(name, msg) {
+        this.notifyObservers('sent', 'me', msg);
+        this.socket.send(JSON.stringify({ name, msg }));
     };
   
     addObserver(observer) {
@@ -30,6 +32,7 @@ class WebHandler {
     };
   
     notifyObservers(event, from, msg) {
+        console.log(event + " from " + from + ": " + msg);
       this.observers.forEach((h) => h({ event, from, msg }));
     };
 }

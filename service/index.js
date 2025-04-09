@@ -3,6 +3,7 @@ const cookieParser = require('cookie-parser');
 const bcrypt = require('bcryptjs');
 const uuid = require('uuid');
 const app = express();
+const { WebSocketServer } = require('ws');
 
 const { MongoClient } = require('mongodb');
 const config = require('./dbConfig.json');
@@ -356,6 +357,33 @@ apiRouter.get('/scores', verifyAuth, (_req, res) => {
 
 const port = process.argv.length > 2 ? process.argv[2] : 4000;
 
-app.listen(port, () => {
+server = app.listen(port, () => {
   console.log(`Listening on port ${port}`);
 });
+
+const socketServer = new WebSocketServer({ server });
+
+socketServer.on('connection', (socket) => {
+    socket.isAlive = true;
+  
+    socket.on('message', function message(data) {
+      socketServer.clients.forEach(function each(client) {
+        if (client !== socket && client.readyState === WebSocket.OPEN) {
+          client.send(data);
+        }
+      });
+    });
+  
+    socket.on('pong', () => {
+      socket.isAlive = true;
+    });
+  });
+  
+  setInterval(() => {
+    socketServer.clients.forEach(function each(client) {
+      if (client.isAlive === false) return client.terminate();
+  
+      client.isAlive = false;
+      client.ping();
+    });
+  }, 10000);

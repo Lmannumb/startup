@@ -53,7 +53,7 @@ export default function App() {
 
 <Routes>
   <Route path='/' element={<Home />} exact />
-  <Route path='/trading' element={<Trading name={username}/>} />
+  <Route path='/trading' element={<Trading userName={username} websocket={new WebHandler()}/>} />
   <Route path='/trading/:id' element={<Chat />} exact />
   <Route path='/shop' element={<Shop userName={username}/>} exact />
   <Route path='/garden' element={<Garden userName={username}/>} exact />
