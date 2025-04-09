@@ -6,11 +6,19 @@ import { WebHandler } from '/src/WebHandler.js';
 export function Trading({userName, websocket}) {
   const [message, setMessage] = React.useState("");
   const [history, setHistory] = React.useState([]);
+  const [online, setOnline] = React.useState([]);
 
   React.useEffect(() => {
     websocket.addObserver((chat) => {
       setHistory((prevMessages) => [...prevMessages, chat]);
-    }, userName);
+    });
+    websocket.name = userName;
+    fetch('/api/clients', {method:"get"})
+    .then((result)=>result.json())
+    .then((result)=>{
+      console.log("onliners: " + JSON.stringify(result));
+      setOnline(result)
+    })
   }, [websocket]);
 
   const historyarray = [];
@@ -28,8 +36,8 @@ export function Trading({userName, websocket}) {
   }
   
   const observerarray = [];
-  for (const i of websocket.observers) {
-    console.log(websocket.observers.length)
+  for (const i of online) {
+    console.log(online.length)
     console.log("balls on my face " + i);
     observerarray.push(
       <div>{i.name}::</div>

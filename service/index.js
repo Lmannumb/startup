@@ -387,3 +387,34 @@ socketServer.on('connection', (socket) => {
       client.ping();
     });
   }, 10000);
+
+  let clients = [];
+
+  apiRouter.post('/clients', async (req, res) => {
+    clients.push(req.body.name);
+    res.cookie('chat', req.body.name, {
+      secure: true,
+      httpOnly: false,
+      sameSite: 'strict',
+    });
+    console.log("clients/get " + JSON.stringify(clients) + " " + req.body.name);
+  });
+
+  apiRouter.get('/clients', async (req, res) => {
+    res.send(clients);
+    console.log("clients/get " + JSON.stringify(clients));
+  });
+
+  apiRouter.delete('/clients', async (req, res) => {
+    if (clients.indexOf(req.cookie['chat']) !== -1) {
+      clients.splice(clients.indexOf(req.cookie['chat'], 1));
+      res.clearCookie('chat');
+      res.status(204).end();
+      console.log("yes");
+    }
+    else {
+      res.status(502).end();
+      console.log("bruh");
+    }
+    console.log("clients/delete " + JSON.stringify(clients));
+  });

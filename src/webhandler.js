@@ -2,6 +2,7 @@
 
 class WebHandler {
     observers = [];
+    name = "E";
     connected = false;
   
     constructor() {
@@ -10,10 +11,19 @@ class WebHandler {
       this.socket = new WebSocket(`${protocol}://${window.location.hostname}:${port}/ws`);
       this.socket.onopen = (event) => {
         this.notifyObservers('system', 'websocket', 'connected');
+        fetch('/api/clients', {
+            method:"post",
+            body: JSON.stringify({"name":this.name}),
+            headers: {
+              'Content-type': 'application/json; charset=UTF-8',
+            },
+        })
         this.connected = true;
       };
       this.socket.onclose = (event) => {
         this.notifyObservers('system', 'websocket', 'disconnected');
+        fetch('/api/clients', {method:"delete"});
+        this.name = "E";
         this.connected = false;
       };
       this.socket.onmessage = async (msg) => {
@@ -27,13 +37,13 @@ class WebHandler {
         this.socket.send(JSON.stringify({ name, msg }));
     };
   
-    addObserver(observer, name) {
-      this.observers.push({observer: observer, name: name});
+    addObserver(observer) {
+      this.observers.push(observer);
     };
   
     notifyObservers(event, from, msg) {
         console.log(event + " from " + from + ": " + msg);
-      this.observers.forEach((h) => h.observer({ event, from, msg }));
+      this.observers.forEach((h) => h({ event, from, msg }));
     };
 }
 
