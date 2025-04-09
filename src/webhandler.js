@@ -27,13 +27,13 @@ class WebHandler {
         this.socket.send(JSON.stringify({ name, msg }));
     };
   
-    addObserver(observer) {
-      this.observers.push(observer);
+    addObserver(observer, name) {
+      this.observers.push({observer: observer, name: name});
     };
   
     notifyObservers(event, from, msg) {
         console.log(event + " from " + from + ": " + msg);
-      this.observers.forEach((h) => h({ event, from, msg }));
+      this.observers.forEach((h) => h.observer({ event, from, msg }));
     };
 }
 
