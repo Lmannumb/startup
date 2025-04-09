@@ -140,12 +140,12 @@ export function Chat() {
       });
     });
 
-    interval = setInterval(function () {
+    /*interval = setInterval(function () {
       console.log("interval!");
       sendMessage({cont: "hey!", ti: "10:20 AM", you: false}
         //, messageRef, UpdateMessages
       );
-    }, 30000);
+    }, 30000);*/
 
     fetch('/api/garden', {
       method: 'get',
